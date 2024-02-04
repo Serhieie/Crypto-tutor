@@ -1,5 +1,4 @@
-import { CommonAsset } from "../constants/fakeApi";
-import { cryptoAssets } from "../constants/fakeApi";
+import { CommonAsset } from "./Cryptocurency.types";
 
 export interface CryptoState {
   isLoading: boolean;
@@ -10,5 +9,5 @@ export interface CryptoState {
 export const initialState: CryptoState = {
   isLoading: false,
   isModalOpen: false,
-  assets: cryptoAssets,
+  assets: [],
 };

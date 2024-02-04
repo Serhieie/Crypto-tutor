@@ -1,19 +1,14 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { useContext } from "react";
 import { Pie } from "react-chartjs-2";
 import type { ChartDataType } from "./chartColorScheme";
-import { CryptoContext } from "../../context/CryptoContext";
-import type { CommonAsset } from "../../constants/fakeApi";
+import type { CommonAsset } from "../../redux/Cryptocurency.types";
+import { useSelector } from "react-redux";
+import { getAssets } from "../../redux/dashboardSlice";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export const PortfolioChart = () => {
-  const { assets } = useContext(CryptoContext) || {
-    isLoading: false,
-    data: [],
-    assets: [],
-    addAsset: () => {},
-  };
+  const assets = useSelector(getAssets);
 
   const chartData: ChartDataType = {
     labels: assets.map((asset: CommonAsset) => asset.name),

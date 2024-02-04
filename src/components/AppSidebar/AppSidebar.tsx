@@ -1,10 +1,10 @@
 import { Layout, Typography, Statistic, Card, List, Tag } from "antd";
-import { useContext } from "react";
-import { CryptoContext } from "../../context/CryptoContext";
 import type { Cryptocurrency } from "../../redux/Cryptocurency.types";
-import { capitalizeFunc } from "../../helpers/capitalizeFunc";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-// import { useGetAllCryptoQuery } from "../../redux/cryptoApi";
+import { useGetAllCryptoQuery } from "../../redux/cryptoApi";
+import { useSelector } from "react-redux";
+import { getAssets } from "../../redux/dashboardSlice";
+import { CoinLabel } from "../CoinLabel";
 
 const siderStyle: React.CSSProperties = {
   padding: "1rem",
@@ -19,18 +19,19 @@ interface AppSidebarProps {
 }
 
 export const AppSidebar: React.FC<AppSidebarProps> = ({ setCoin, setIsModalOpenl }) => {
-  // const data = useGetAllCryptoQuery()
-  const { assets, data } = useContext(CryptoContext) || {
-    isLoading: false,
-    data: [],
-    assets: [],
-  };
+  const data = useGetAllCryptoQuery();
+  const assets = useSelector(getAssets);
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (data) {
-      const selectedCoin = data?.find((crypto) => crypto.id === event.currentTarget.id);
-      setIsModalOpenl(true);
-      setCoin(selectedCoin || null);
+      const selectedCoin = data.data?.result.find(
+        (crypto) => crypto.id === event.currentTarget.id
+      );
+
+      if (selectedCoin) {
+        setIsModalOpenl(true);
+        setCoin(selectedCoin);
+      }
     }
   };
 
@@ -41,14 +42,32 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ setCoin, setIsModalOpenl
           onClick={handleClick}
           id={asset.id}
           key={asset.id}
-          style={{ width: 328, height: 178, marginBottom: "1rem", padding: 0 }}
+          style={{ width: 328, height: 186, marginBottom: "1rem", padding: 0 }}
         >
+          {asset && (
+            <CoinLabel
+              coinName={asset.name}
+              coinSymbol={asset.symbol}
+              coinIcon={asset.icon}
+              size={30}
+              level={4}
+              marg={10}
+            />
+          )}
           <Statistic
-            title={asset.id ? capitalizeFunc(asset.id) : null}
             value={asset.totalAmount}
             precision={2}
-            valueStyle={{ color: asset.grow ? "#3f8600" : "#cf1322" }}
-            prefix={asset.grow ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
+            valueStyle={{
+              marginTop: 6,
+              color: (asset.totalProfit || 0) >= -0.000001 ? "#3f8600" : "#cf1322",
+            }}
+            prefix={
+              (asset.totalProfit || 0) >= -0.000001 ? (
+                <ArrowUpOutlined />
+              ) : (
+                <ArrowDownOutlined />
+              )
+            }
             suffix="$"
           />
           <List
@@ -62,11 +81,15 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ setCoin, setIsModalOpenl
                 <span className=" font-xs font-bold"> {item.title}</span>
                 <span className=" font-xs font-bold">
                   {item.withTag && (
-                    <Tag color={asset.grow ? "green" : "red"}>{asset.growPercent}%</Tag>
+                    <Tag color={(asset.totalProfit || 0) >= -0.000001 ? "green" : "red"}>
+                      {asset.growPercent}%
+                    </Tag>
                   )}
                   {item.isPlain && item.value}
                   {!item.isPlain && (
-                    <Typography.Text type={asset.grow ? "success" : "danger"}>
+                    <Typography.Text
+                      type={(asset.totalProfit || 0) >= -0.000001 ? "success" : "danger"}
+                    >
                       {" "}
                       {item.value?.toFixed(2)}$
                     </Typography.Text>

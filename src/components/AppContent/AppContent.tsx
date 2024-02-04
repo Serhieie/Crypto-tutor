@@ -1,24 +1,13 @@
-import { Layout, Typography, Button } from "antd";
+import { Layout, Button, Spin } from "antd";
 import { useState } from "react";
-// import { CryptoContext } from "../../context/CryptoContext";
 import { PortfolioChart } from "../PortfolioChart/PortfolioChart";
 import { AssetsTable } from "../AssetsTable";
+import { contentStyle } from "./contentStyle";
 import { useGetAllCryptoQuery } from "../../redux/cryptoApi";
-
-const contentStyle: React.CSSProperties = {
-  textAlign: "center",
-  height: "calc(100vh - 50px)",
-  lineHeight: "80px",
-  color: "#fff",
-  backgroundColor: "#1E293B",
-  padding: "1rem",
-};
 
 export const AppContent = () => {
   const { data, isLoading } = useGetAllCryptoQuery();
   const [isChartPieOpen, setIsChartPieOpen] = useState<boolean>(true);
-
-  console.log(data?.result);
 
   const handleChangeChart = () => {
     setIsChartPieOpen((state) => !state);
@@ -27,15 +16,23 @@ export const AppContent = () => {
   if (isLoading) {
     return (
       <Layout.Content style={contentStyle}>
-        <Typography.Title level={3} style={{ textAlign: "left", color: "white" }}>
-          Loading...
-        </Typography.Title>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100vh",
+            marginTop: "-40px",
+          }}
+        >
+          <Spin size="large" />
+        </div>
       </Layout.Content>
     );
   }
 
   return (
-    data && (
+    data?.result && (
       <Layout.Content style={contentStyle}>
         <Button
           onClick={handleChangeChart}

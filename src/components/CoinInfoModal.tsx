@@ -1,22 +1,19 @@
 import { Typography, Divider, Tag } from "antd";
 import { CoinLabel } from "./CoinLabel";
-import { useContext, useEffect, useState } from "react";
-import { CryptoContext } from "../context/CryptoContext";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { getAssets } from "../redux/dashboardSlice";
 import type { Cryptocurrency } from "../redux/Cryptocurency.types";
-import type { CommonAsset } from "../constants/fakeApi";
+import type { CommonAsset } from "../redux/Cryptocurency.types";
 import { CoinCard } from "./CoinCard";
+
 interface CoininfoModalProps {
   coin: Cryptocurrency | null;
 }
 
 export const CoinInfoModal: React.FC<CoininfoModalProps> = ({ coin }) => {
   const [assetCoin, setAssetCoin] = useState<CommonAsset | null>(null);
-  const { assets } = useContext(CryptoContext) || {
-    isLoading: false,
-    data: [],
-    assets: [],
-    addAsset: () => {},
-  };
+  const assets = useSelector(getAssets);
 
   const findCoinById = (assets: CommonAsset[], coin: Cryptocurrency) => {
     const isCoinInWallet = assets.find((asset) => asset.id === coin.id);
@@ -35,7 +32,16 @@ export const CoinInfoModal: React.FC<CoininfoModalProps> = ({ coin }) => {
   return (
     <div className="px-10 pt-6">
       {" "}
-      <CoinLabel coin={coin} />
+      {coin && (
+        <CoinLabel
+          coinName={coin.name}
+          coinSymbol={coin.symbol}
+          coinIcon={coin.icon}
+          size={44}
+          level={3}
+          marg={20}
+        />
+      )}
       {assetCoin ? (
         <CoinCard coin={assetCoin} />
       ) : (
@@ -47,15 +53,21 @@ export const CoinInfoModal: React.FC<CoininfoModalProps> = ({ coin }) => {
       <Typography.Paragraph className=" flex gap-3 justify-center " style={{ margin: 0 }}>
         <Typography.Text strong>1 Hour:</Typography.Text>
         {coin && (
-          <Tag color={coin.priceChange1h > 0 ? "green" : "red"}>{coin.priceChange1h}</Tag>
+          <Tag color={coin.priceChange1h >= -0.000001 ? "green" : "red"}>
+            {coin.priceChange1h}
+          </Tag>
         )}
         <Typography.Text strong>1 Day:</Typography.Text>
         {coin && (
-          <Tag color={coin.priceChange1d > 0 ? "green" : "red"}>{coin.priceChange1d}</Tag>
+          <Tag color={coin.priceChange1d >= -0.000001 ? "green" : "red"}>
+            {coin.priceChange1d}
+          </Tag>
         )}
         <Typography.Text strong>1 Week:</Typography.Text>
         {coin && (
-          <Tag color={coin.priceChange1w > 0 ? "green" : "red"}>{coin.priceChange1w}</Tag>
+          <Tag color={coin.priceChange1w >= -0.000001 ? "green" : "red"}>
+            {coin.priceChange1w}
+          </Tag>
         )}
       </Typography.Paragraph>
       <Divider className="mt-2" />

@@ -1,5 +1,4 @@
 import React from "react";
-import { Cryptocurrency } from "../../components/AppSidebar/AppSideBar.types";
 import { CommonAsset } from "../../constants/fakeApi";
 
 interface CryptoContextProviderProps {
@@ -8,9 +7,10 @@ interface CryptoContextProviderProps {
 
 export interface CryptoContextProps {
   assets: CommonAsset[];
-  data: Cryptocurrency[] | undefined;
+  data: {
+    result: [];
+  };
   isLoading: boolean;
-  addAsset: (newAsset: CommonAsset) => void;
 }
 
 declare const CryptoContext: React.Context<CryptoContextProps>;

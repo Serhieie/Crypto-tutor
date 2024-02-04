@@ -3,6 +3,21 @@ export interface Explorer {
   url: string;
 }
 
+export interface CommonAsset {
+  id?: string;
+  amount: number;
+  price: number;
+  date?: number;
+  growPercent?: number;
+  totalAmount?: number;
+  totalProfit?: number;
+  grow?: boolean;
+  name?: string;
+  priceAvg?: number;
+  icon?: string;
+  symbol?: string;
+}
+
 export interface Cryptocurrency {
   id: string;
   icon: string;

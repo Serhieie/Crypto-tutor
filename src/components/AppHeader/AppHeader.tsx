@@ -1,29 +1,17 @@
 import { Layout, Button, Select, Space, Drawer, Typography } from "antd";
-import { useContext, useEffect, useState } from "react";
-// import { useSelector } from "react-redux";
-import { CryptoContext } from "../../context/CryptoContext";
-import type { Cryptocurrency } from "../../redux/Cryptocurency.types";
-import { AddAssetForm } from "../AddAssetForm";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { AppHeaderProps } from "./AppHeader.types";
+import { AddAssetForm } from "../AddAssetForm/AddAssetForm";
 import { headerStyle } from "./AppHeader.styles";
 import { useGetAllCryptoQuery } from "../../redux/cryptoApi";
-// import { getAssets } from "../../redux/dashboardSlice";
-
-interface AppHeaderProps {
-  setCoin: React.Dispatch<React.SetStateAction<Cryptocurrency | null>>;
-  setIsModalOpenl: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { getAssets } from "../../redux/dashboardSlice";
 
 export const AppHeader: React.FC<AppHeaderProps> = ({ setCoin, setIsModalOpenl }) => {
   const [select, setSelect] = useState<boolean>(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const { data } = useGetAllCryptoQuery();
-  // const a = useSelector(getAssets);
-  // console.log("assets", a);
-  const { assets } = useContext(CryptoContext) || {
-    isLoading: false,
-    data: [],
-    assets: [],
-  };
+  const assets = useSelector(getAssets);
 
   const showDrawer = () => {
     setIsDrawerOpen(true);
@@ -49,17 +37,18 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ setCoin, setIsModalOpenl }
     setIsModalOpenl(true);
   };
 
-  const cryptoCardMap: Record<string, number> = Array.isArray(data)
-    ? data.reduce((acc: Record<string, number>, coin) => {
-        acc[coin.id] = coin.price;
-        return acc;
-      }, {})
-    : {};
+  const cryptoCardMap: Record<string, number> | undefined = data?.result.reduce(
+    (acc: Record<string, number>, coin) => {
+      acc[coin.id] = coin.price;
+      return acc;
+    },
+    {}
+  );
 
   const portfolioValue = assets
     .map((asset) => {
-      if (Array.isArray(data) && data.length > 0) {
-        return (asset.amount ?? 0) * cryptoCardMap[asset.id ?? 0];
+      if (data?.result.length && asset.id && cryptoCardMap) {
+        return Number((asset.amount ?? 0) * cryptoCardMap[asset.id]);
       }
       return 0;
     })
@@ -91,9 +80,6 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ setCoin, setIsModalOpenl }
           </Space>
         )}
       />
-      {/* <Modal open={isModalOpen} onCancel={handleCancel} footer={null}>
-        <CoinInfoModal coin={coin} />
-      </Modal> */}
       <Button
         onClick={showDrawer}
         className=" bg-[#1677ff] hover:bg-[#346ab5] "

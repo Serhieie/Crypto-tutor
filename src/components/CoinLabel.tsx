@@ -1,20 +1,33 @@
 import { Flex, Typography } from "antd";
-import { Cryptocurrency } from "../redux/Cryptocurency.types";
 
-interface CoinLabel {
-  coin: Cryptocurrency | null;
+interface CoinLabelProps {
+  coinIcon: string | undefined;
+  coinSymbol: string | undefined;
+  coinName: string | undefined;
+  size?: number;
+  level?: 1 | 5 | 2 | 3 | 4 | undefined;
+  marg?: number;
 }
 
-export const CoinLabel: React.FC<CoinLabel> = ({ coin }) => {
+export const CoinLabel: React.FC<CoinLabelProps> = ({
+  coinIcon,
+  coinSymbol,
+  coinName,
+  size,
+  level,
+  marg,
+}) => {
   return (
     <Flex>
-      <img
-        src={coin?.icon}
-        alt={coin?.name}
-        style={{ marginRight: 20, height: 40, width: 40 }}
-      />
-      <Typography.Title style={{ margin: 0 }} level={2}>
-        <span>({coin?.symbol})</span> {coin?.name}
+      {coinIcon && (
+        <img
+          src={coinIcon}
+          alt={coinName}
+          style={{ marginRight: marg, height: size, width: size }}
+        />
+      )}
+      <Typography.Title style={{ margin: 0 }} level={level}>
+        <span>({coinSymbol ? coinSymbol : null})</span> {coinName ? coinName : null}
       </Typography.Title>
     </Flex>
   );

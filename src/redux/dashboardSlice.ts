@@ -2,7 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { initialState } from "./initialState";
-import type { CommonAsset } from "../constants/fakeApi";
+import { createSelector } from "reselect";
+import type { CommonAsset } from "./Cryptocurency.types";
 import type { CryptoState } from "./initialState";
 
 export const dashboardSlice = createSlice({
@@ -16,7 +17,7 @@ export const dashboardSlice = createSlice({
       state.isModalOpen = !state.isLoading;
     },
     changeAssets(state, action: PayloadAction<CommonAsset[]>) {
-      state.assets = [...state.assets, ...action.payload];
+      state.assets = [...action.payload];
     },
   },
 });
@@ -24,7 +25,6 @@ export const dashboardSlice = createSlice({
 const persistConfig = {
   key: "dashboard",
   storage,
-  blacklist: ["isLoading", "isModalOpen"],
 };
 
 export const persistedDashboardReducer = persistReducer(
@@ -32,8 +32,17 @@ export const persistedDashboardReducer = persistReducer(
   dashboardSlice.reducer
 );
 
+export const getDashboardState = (state: { dashboard: CryptoState }) => state.dashboard;
+
+export const getAssets = createSelector(
+  getDashboardState,
+  (dashboard) => dashboard.assets
+);
+
 export const { setIsLoading, changeAssets, setIsModalOpen } = dashboardSlice.actions;
-export const getAssets = (state: { dashboard: CryptoState }) => state.dashboard.assets;
+// export const getAssets = (state: { dashboard: CryptoState }) => ({
+//   assets: state.dashboard.assets,
+// });
 export const getIsLoading = (state: { dashboard: CryptoState }) =>
   state.dashboard.isLoading;
 export const getIsModalOpen = (state: { dashboard: CryptoState }) =>

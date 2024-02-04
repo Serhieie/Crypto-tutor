@@ -8,10 +8,11 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useContext } from "react";
+import { useSelector } from "react-redux";
+import { getAssets } from "../../redux/dashboardSlice";
 import { Line } from "react-chartjs-2";
 import { generateRandomColor } from "../../helpers/generateRandomColor";
-import { CryptoContext } from "../../context/CryptoContext";
+import { useGetAllCryptoQuery } from "../../redux/cryptoApi";
 
 ChartJS.register(
   CategoryScale,
@@ -24,12 +25,8 @@ ChartJS.register(
 );
 
 export const PortfolioChartLine = () => {
-  const { data, assets } = useContext(CryptoContext) || {
-    isLoading: false,
-    data: [],
-    assets: [],
-    addAsset: () => {},
-  };
+  const { data } = useGetAllCryptoQuery();
+  const assets = useSelector(getAssets);
 
   console.log(data, assets);
 
