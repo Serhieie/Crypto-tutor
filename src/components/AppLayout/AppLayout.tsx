@@ -20,10 +20,10 @@ export const AppLayout: React.FC = () => {
   return (
     <Layout>
       <AppHeader setCoin={setCoin} setIsModalOpenl={setIsModalOpenl} />
-      <Layout className="responsive-layout">
+      <div className="flex pb-4 pt-2 px-4 bg-[#0F172A]  ">
         <AppSidebar setCoin={setCoin} setIsModalOpenl={setIsModalOpenl} />
         <AppContent />
-      </Layout>
+      </div>
       <Modal open={isModalOpen} onCancel={handleCancel} footer={null}>
         <CoinInfoModal coin={coin} />
       </Modal>

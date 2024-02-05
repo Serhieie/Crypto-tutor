@@ -1,64 +1,144 @@
-import { Layout, Typography, Statistic, Card, List, Tag } from "antd";
+import { Typography, Statistic, List, Tag, Modal, Button } from "antd";
+import { useState, useMemo } from "react";
+
 import type { Cryptocurrency } from "../../redux/Cryptocurency.types";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { useGetAllCryptoQuery } from "../../redux/cryptoApi";
-import { useSelector } from "react-redux";
-import { getAssets } from "../../redux/dashboardSlice";
+import { RiDeleteBackLine } from "react-icons/ri";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  getAssets,
+  removeAsset,
+  getIsCoinsShowed,
+  getFilterValue,
+} from "../../redux/dashboardSlice";
 import { CoinLabel } from "../CoinLabel";
-
-const siderStyle: React.CSSProperties = {
-  padding: "1rem",
-  overflowY: "scroll",
-  height: "calc(100vh - 50px)",
-  backgroundColor: "#0F172A",
-};
 
 interface AppSidebarProps {
   setCoin: React.Dispatch<React.SetStateAction<Cryptocurrency | null>>;
   setIsModalOpenl: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+interface DeleteButtonProps {
+  name: string;
+  id: string;
+}
+
 export const AppSidebar: React.FC<AppSidebarProps> = ({ setCoin, setIsModalOpenl }) => {
+  const dispatch = useDispatch();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const data = useGetAllCryptoQuery();
+  const isCoinShowed = useSelector(getIsCoinsShowed);
+  const [coinForDelete, setCoinForDelete] = useState<DeleteButtonProps>();
   const assets = useSelector(getAssets);
+  const filter = useSelector(getFilterValue);
+
+  const getVisibleContacts = useMemo(() => {
+    const normalizedFilter = filter.toLowerCase();
+    if (!Array.isArray(assets)) {
+      return [];
+    }
+
+    const filteredContacts = assets.filter(
+      ({ id, name }) =>
+        id?.toLowerCase().includes(normalizedFilter) ||
+        name?.toLowerCase().includes(normalizedFilter)
+    );
+
+    return filteredContacts;
+  }, [assets, filter]);
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (isDeleteModalOpen) return;
     if (data) {
-      const selectedCoin = data.data?.result.find(
-        (crypto) => crypto.id === event.currentTarget.id
-      );
+      const clickedElement = event.target as HTMLElement;
+      const isButton = clickedElement.id === "close-card-button";
+      const cryptoId = clickedElement.dataset.cryptoId;
 
-      if (selectedCoin) {
+      const selectedCoin = data.data?.result.find(
+        (crypto) => crypto.id === (event.currentTarget as HTMLDivElement).id
+      );
+      if (selectedCoin)
+        setCoinForDelete({ name: selectedCoin.name, id: selectedCoin.id });
+
+      if (selectedCoin && !isButton) {
         setIsModalOpenl(true);
         setCoin(selectedCoin);
+      } else if (isButton && cryptoId) {
+        setIsDeleteModalOpen((state) => !state);
+      }
+    }
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen((state) => !state);
+  };
+
+  const handleDeleteAtDeleteModal = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (data) {
+      const buttonId = event.currentTarget.id;
+      const buttonDataSetId = event.currentTarget.dataset.delete;
+      const selectedCoin = data.data?.result.find(
+        (crypto) => crypto.id === buttonDataSetId
+      );
+
+      if (buttonId === "delete-btn" && selectedCoin) {
+        dispatch(removeAsset(selectedCoin.id));
+        setIsDeleteModalOpen((state) => !state);
       }
     }
   };
 
   return (
-    <Layout.Sider className="sider-top" width="25%" style={siderStyle}>
-      {assets.map((asset) => (
-        <Card
+    <div
+      className={`
+      ${assets.length ? " grid " : " hidden "}
+      ${
+        isCoinShowed
+          ? " w-[100%]    grid-cols-1 ssm2:grid-cols-1 md:grid-cols-2 md3:grid-cols-3 1xl2:grid-cols-4 gap-2  gap-y-2 p-2  auto-rows-min   "
+          : " w-[22%] grid-cols-1 gap-2 lg:hidden auto-rows-max  rounded-2xl overflow-hidden pr-1 "
+      }
+          overflow-y-scroll   h-[calc(100vh-86px)]
+        bg-[#0F172A]  grid   `}
+    >
+      {getVisibleContacts.map((asset) => (
+        <div
+          className={`
+          ${isCoinShowed ? "  " : " w-[96%] "}
+             rounded-xl   bg-white   p-2 `}
           onClick={handleClick}
           id={asset.id}
           key={asset.id}
-          style={{ width: 328, height: 186, marginBottom: "1rem", padding: 0 }}
         >
-          {asset && (
-            <CoinLabel
-              coinName={asset.name}
-              coinSymbol={asset.symbol}
-              coinIcon={asset.icon}
-              size={30}
-              level={4}
-              marg={10}
-            />
-          )}
+          <div className="flex    justify-between p-2 rounded-xl ">
+            {asset && (
+              <CoinLabel
+                coinName={asset.name}
+                coinSymbol={asset.symbol}
+                coinIcon={asset.icon}
+                size={30}
+                level={4}
+                marg={10}
+              />
+            )}
+            <button
+              id="close-card-button"
+              data-crypto-id={asset.id}
+              type="button"
+              className="bg-green p-1 "
+            >
+              <RiDeleteBackLine className=" pointer-events-none" size={24} />
+            </button>
+          </div>
+
           <Statistic
             value={asset.totalAmount}
             precision={2}
             valueStyle={{
               marginTop: 6,
+              marginLeft: 16,
               color: (asset.totalProfit || 0) >= -0.000001 ? "#3f8600" : "#cf1322",
             }}
             prefix={
@@ -98,8 +178,36 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ setCoin, setIsModalOpenl
               </List.Item>
             )}
           />
-        </Card>
+        </div>
       ))}
-    </Layout.Sider>
+      <Modal open={isDeleteModalOpen} onCancel={handleCloseDeleteModal} footer={null}>
+        <div className="flex flex-col gap-14 py-4 ">
+          <p className="text-center font-bold text-xl m-0 p-0  pointer-events-none ">
+            Confirm{" "}
+            <span className="text-2xl text-sky-600 mx-1">{coinForDelete?.name}</span>{" "}
+            Asset Delete
+          </p>
+          <div className="flex gap-10 justify-center">
+            <Button
+              onClick={handleDeleteAtDeleteModal}
+              id="delete-btn"
+              data-delete={`${coinForDelete?.id}`}
+              className=" hover:bg-[#346ab5] mr-2 h-12 px-6"
+              type="primary"
+            >
+              Delete Asset
+            </Button>
+            <Button
+              onClick={handleCloseDeleteModal}
+              id="cancel-btn"
+              className=" bg-rose-500 hover:bg-[#346ab5] h-12 px-6"
+              type="primary"
+            >
+              Close
+            </Button>
+          </div>
+        </div>
+      </Modal>
+    </div>
   );
 };

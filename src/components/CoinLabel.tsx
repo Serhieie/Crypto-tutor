@@ -7,6 +7,7 @@ interface CoinLabelProps {
   size?: number;
   level?: 1 | 5 | 2 | 3 | 4 | undefined;
   marg?: number;
+  color?: string;
 }
 
 export const CoinLabel: React.FC<CoinLabelProps> = ({
@@ -16,6 +17,7 @@ export const CoinLabel: React.FC<CoinLabelProps> = ({
   size,
   level,
   marg,
+  color,
 }) => {
   return (
     <Flex>
@@ -26,7 +28,10 @@ export const CoinLabel: React.FC<CoinLabelProps> = ({
           style={{ marginRight: marg, height: size, width: size }}
         />
       )}
-      <Typography.Title style={{ margin: 0 }} level={level}>
+      <Typography.Title
+        style={{ margin: 0, color: color, fontFamily: "Montserrat, sans-serif" }}
+        level={level}
+      >
         <span>({coinSymbol ? coinSymbol : null})</span> {coinName ? coinName : null}
       </Typography.Title>
     </Flex>

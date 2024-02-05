@@ -28,7 +28,7 @@ export const PortfolioChart = () => {
     ],
   };
   return (
-    <div className="mt-1 flex justify-center h-[600px]">
+    <div className=" flex justify-center max-h-[520px] mt-8   ">
       <Pie data={chartData} />
     </div>
   );

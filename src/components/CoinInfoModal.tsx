@@ -30,7 +30,7 @@ export const CoinInfoModal: React.FC<CoininfoModalProps> = ({ coin }) => {
   }, [assets, coin]);
 
   return (
-    <div className="px-10 pt-6">
+    <div className="px-10 md:px-2 pt-6 md:pt-2">
       {" "}
       {coin && (
         <CoinLabel
@@ -45,35 +45,44 @@ export const CoinInfoModal: React.FC<CoininfoModalProps> = ({ coin }) => {
       {assetCoin ? (
         <CoinCard coin={assetCoin} />
       ) : (
-        <Typography.Title className="mt-4" level={3}>
+        <Typography.Title className="mt-4  font-montserrat" level={3}>
           {"Item is not in your wallet"}
         </Typography.Title>
       )}
-      <Divider className="my-2 mx-0" />
-      <Typography.Paragraph className=" flex gap-3 justify-center " style={{ margin: 0 }}>
-        <Typography.Text strong>1 Hour:</Typography.Text>
+      <Divider className="my-2 ssm2:hidden mx-0" />
+      <Typography.Paragraph
+        className="ssm2:hidden flex gap-3 justify-center font-montserrat "
+        style={{ margin: 0 }}
+      >
+        <Typography.Text className=" font-montserrat" strong>
+          1 Hour:
+        </Typography.Text>
         {coin && (
           <Tag color={coin.priceChange1h >= -0.000001 ? "green" : "red"}>
             {coin.priceChange1h}
           </Tag>
         )}
-        <Typography.Text strong>1 Day:</Typography.Text>
+        <Typography.Text className="font-montserrat" strong>
+          1 Day:
+        </Typography.Text>
         {coin && (
           <Tag color={coin.priceChange1d >= -0.000001 ? "green" : "red"}>
             {coin.priceChange1d}
           </Tag>
         )}
-        <Typography.Text strong>1 Week:</Typography.Text>
+        <Typography.Text className="font-montserrat" strong>
+          1 Week:
+        </Typography.Text>
         {coin && (
           <Tag color={coin.priceChange1w >= -0.000001 ? "green" : "red"}>
             {coin.priceChange1w}
           </Tag>
         )}
       </Typography.Paragraph>
-      <Divider className="mt-2" />
+      <Divider className="mt-2 font-montserrat " />
       {coin?.price && (
         <Typography.Paragraph>
-          <Typography.Text className="mr-2" strong>
+          <Typography.Text className="mr-2 font-montserrat " strong>
             Price:{" "}
           </Typography.Text>
           {coin?.price.toFixed(6)}$
@@ -81,7 +90,7 @@ export const CoinInfoModal: React.FC<CoininfoModalProps> = ({ coin }) => {
       )}
       {coin?.priceBtc && (
         <Typography.Paragraph>
-          <Typography.Text className="mr-2" strong>
+          <Typography.Text className="mr-2 font-montserrat " strong>
             Price BTC:{" "}
           </Typography.Text>
           {coin?.priceBtc}
@@ -89,7 +98,7 @@ export const CoinInfoModal: React.FC<CoininfoModalProps> = ({ coin }) => {
       )}
       {coin?.marketCap && (
         <Typography.Paragraph>
-          <Typography.Text className="mr-2" strong>
+          <Typography.Text className="mr-2 font-montserrat " strong>
             Market Cup:{" "}
           </Typography.Text>
           {coin?.marketCap}$
@@ -97,7 +106,7 @@ export const CoinInfoModal: React.FC<CoininfoModalProps> = ({ coin }) => {
       )}
       {coin?.contractAddress && (
         <Typography.Paragraph>
-          <Typography.Text className="mr-2" strong>
+          <Typography.Text className="mr-2 font-montserrat " strong>
             Contract Adress:{" "}
           </Typography.Text>
           {coin?.contractAddress}

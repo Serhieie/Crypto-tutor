@@ -9,7 +9,7 @@ export const ResultComponent: React.FC<ResultComponentProps> = ({
 }) => {
   return (
     <Result
-      className="mt-10"
+      className="mt-10 custom-result"
       status="success"
       title="New Asset Added"
       subTitle={`Added ${assetRef?.amount} of ${coinName} at price ${assetRef?.price}`}
@@ -28,7 +28,7 @@ export const ResultComponent: React.FC<ResultComponentProps> = ({
           key="buy"
           className=" bg-[#1677ff] hover:bg-[#346ab5] "
         >
-          Buy More
+          Add More
         </Button>,
       ]}
     />

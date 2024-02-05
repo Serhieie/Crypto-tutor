@@ -3,15 +3,20 @@
 @import "tailwindcss/utilities";
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Montserrat", sans-serif;
+
   line-height: 1.5;
   font-weight: 400;
-  background-color: #242424;
+  background-color: #0f172a;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #0f172a;
 }
 
 @media (max-width: 768px) {
@@ -22,4 +27,54 @@
   .sider-top {
     order: -1;
   }
+}
+
+@media (min-width: 1200px) {
+  .sider-top .ant-layout-sider-zero-width-trigger {
+    display: none;
+  }
+}
+
+#close-card-button {
+  background-color: transparent;
+}
+
+.custom-form-item .ant-form-item-label > label {
+  color: #94a3b8;
+}
+
+.custom-datePicker .ant-picker-ok > button {
+  background-color: #1677ff;
+}
+
+.custom-result.ant-result .ant-result-title,
+.custom-result.ant-result .ant-result-subtitle {
+  color: #94a3b8;
+}
+
+.custom-result.ant-result .ant-result-icon svg {
+  color: #cbd5e1;
+}
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  transition: all 300ms ease-in-out;
+  background-color: #2563eb;
+  background-image: none;
+}
+
+#delete-btn {
+  background-color: #e11d48;
+}
+
+#cancel-btn,
+#delete-btn {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+#delete-btn:hover {
+  background-color: #f43f5e;
 }

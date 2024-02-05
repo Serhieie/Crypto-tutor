@@ -43,7 +43,12 @@ export const AssetsTable = () => {
 
   return (
     <Table<DataType>
-      style={{ height: "100%", maxHeight: "calc(100vh - 200px)", overflowY: "scroll" }}
+      style={{
+        height: "100%",
+        maxHeight: "calc(100vh - 180px)",
+        overflowY: "scroll",
+        marginTop: 20,
+      }}
       pagination={false}
       columns={columns}
       dataSource={dataAssets}

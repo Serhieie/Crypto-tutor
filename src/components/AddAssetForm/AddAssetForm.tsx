@@ -1,4 +1,5 @@
 import type { Cryptocurrency } from "../../redux/Cryptocurency.types";
+import { PiHandCoinsLight } from "react-icons/pi";
 import { CoinLabel } from "../CoinLabel";
 import type { CommonAsset } from "../../redux/Cryptocurency.types";
 import { useDispatch, useSelector } from "react-redux";
@@ -81,7 +82,7 @@ export const AddAssetForm: React.FC<AddAssetFormProps> = ({ onCloseResult }) => 
       {" "}
       <Select
         open={select}
-        style={{ width: "100%" }}
+        style={{ width: "100%", outline: "none", fontFamily: "Montserrat, sans-serif" }}
         placeholder={["Select Coin"]}
         onSelect={handleSelect}
         onClick={() => setSelect((prev) => !prev)}
@@ -91,17 +92,17 @@ export const AddAssetForm: React.FC<AddAssetFormProps> = ({ onCloseResult }) => 
           icon: coin.icon,
         }))}
         optionRender={(option) => (
-          <Space>
+          <Space className=" font-montserrat">
             <img src={option.data.icon} alt={option.data.label} width={30} />
             {option.data.label}
           </Space>
         )}
       />
-      {coin && (
+      {coin ? (
         <Form
           form={form}
-          style={{ paddingTop: 50 }}
-          className="w-full m-0"
+          style={{ paddingTop: 50, backgroundColor: "#334155", color: "white" }}
+          className="w-full m-0 form"
           name="basic"
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 16 }}
@@ -120,11 +121,15 @@ export const AddAssetForm: React.FC<AddAssetFormProps> = ({ onCloseResult }) => 
               coinName={coin.name}
               coinSymbol={coin.symbol}
               coinIcon={coin.icon}
+              size={55}
+              marg={20}
+              color="#CBD5E1"
             />
           )}
-          <Divider />
+          <Divider className="custom-form-item" />
           <Form.Item<FieldType>
-            style={{ width: "100%", minWidth: 290 }}
+            className="custom-form-item"
+            style={{ width: "100%", minWidth: 250, fontFamily: "Montserrat, sans-serif" }}
             label="Amount"
             name="amount"
             rules={[
@@ -139,49 +144,77 @@ export const AddAssetForm: React.FC<AddAssetFormProps> = ({ onCloseResult }) => 
               placeholder="Enter coin amount"
               onChange={handleAmountChange}
               size={"large"}
-              style={{ width: "100%", minWidth: 250, marginLeft: 12 }}
+              style={{
+                width: "100%",
+                minWidth: 250,
+                marginLeft: 6,
+                backgroundColor: "#F8FAFC",
+                fontFamily: "Montserrat, sans-serif",
+              }}
             />
           </Form.Item>
 
           <Form.Item<FieldType>
-            style={{ width: "100%", minWidth: 290 }}
+            className="custom-form-item"
+            style={{ width: "100%", minWidth: 290, fontFamily: "Montserrat, sans-serif" }}
             label="Price"
             name="price"
           >
             <InputNumber
               onChange={handleAmountPrice}
               size={"large"}
-              style={{ width: "100%", minWidth: 250, marginLeft: 12 }}
+              style={{
+                width: "100%",
+                minWidth: 250,
+                marginLeft: 6,
+                backgroundColor: "#F8FAFC",
+                fontFamily: "Montserrat, sans-serif",
+              }}
             />
           </Form.Item>
           <Form.Item<FieldType>
+            className="custom-form-item"
             label="Date & Time"
             name="date"
-            style={{ width: "100%", minWidth: 290 }}
+            style={{ width: "100%", minWidth: 290, fontFamily: "Montserrat, sans-serif" }}
           >
             <DatePicker
+              className="custom-datePicker"
               size={"large"}
               showTime
-              style={{ width: "100%", minWidth: 250, marginLeft: 12 }}
+              style={{
+                width: "100%",
+                minWidth: 250,
+                marginLeft: 6,
+                backgroundColor: "#F8FAFC",
+                fontFamily: "Montserrat, sans-serif",
+              }}
             />
           </Form.Item>
 
           <Form.Item<FieldType>
+            className="custom-form-item"
             label="Total"
             name="total"
-            style={{ width: "100%", minWidth: 290 }}
+            style={{ width: "100%", minWidth: 290, fontFamily: "Montserrat, sans-serif" }}
           >
             <InputNumber
               size={"large"}
               disabled
-              style={{ width: "100%", minWidth: 250, marginLeft: 12 }}
+              style={{
+                backgroundColor: "#F8FAFC",
+                width: "100%",
+                minWidth: 250,
+                marginLeft: 6,
+                fontFamily: "Montserrat, sans-serif",
+              }}
             />
           </Form.Item>
 
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Form.Item>
             <Button
               size={"large"}
-              className=" bg-[#1677ff] hover:bg-[#346ab5] "
+              className="ssm2:ml-16 md:ml-24 ml-28 w-52 mx-auto bg-[#1677ff] hover:bg-[#346ab5] font-montserrat "
               type="primary"
               htmlType="submit"
             >
@@ -189,6 +222,11 @@ export const AddAssetForm: React.FC<AddAssetFormProps> = ({ onCloseResult }) => 
             </Button>
           </Form.Item>
         </Form>
+      ) : (
+        <div className="w-full font-montserrat text-center flex flex-col mt-32 items-center text-slate-400">
+          <PiHandCoinsLight size={200} />
+          <p className="text-slate-400 text-3xl">Add Asset to Your Portfolio</p>
+        </div>
       )}
     </>
   );
