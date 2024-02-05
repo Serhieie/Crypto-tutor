@@ -12,7 +12,7 @@ export const Filter: React.FC = () => {
   };
 
   return (
-    <div className="flex w-full  lg:mx-auto ssm:w-[260px] sm:w-[200px] ">
+    <div className="flex w-full  items-center  lg:mx-auto ssm:w-[260px] sm:w-[200px] ">
       <label
         className=" text-slate-400 sm:text-md text-xl mr-4 font-montserrat font-medium "
         htmlFor="filterInput"

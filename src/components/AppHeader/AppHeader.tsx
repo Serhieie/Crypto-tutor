@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { AppHeaderProps } from "./AppHeader.types";
 import { AddAssetForm } from "../AddAssetForm/AddAssetForm";
 import { useGetAllCryptoQuery } from "../../redux/cryptoApi";
+import { CiBitcoin } from "react-icons/ci";
 import {
   getAssets,
   setIsCoinsShowed,
@@ -22,8 +23,6 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ setCoin, setIsModalOpenl }
   const { data } = useGetAllCryptoQuery();
   const assets = useSelector(getAssets);
   const isCoinsShowed = useSelector(getIsCoinsShowed);
-
-  console.log(isDrawerOpen);
 
   const showDrawer = () => {
     dispatch(setIsDrawerOpen(true));
@@ -72,8 +71,10 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ setCoin, setIsModalOpenl }
 
   return (
     <Layout.Header
-      className="sm:h-28 sm:px-1 md:py-2  ssm2:h-40 sm2:h-[106px] md2:h-28 
-       lg2:h-28 sm:gap-1 md:flex-col md:gap-4 gap-0  flex flex-wrap font-m"
+      className={`
+      ${
+        !assets.length ? " h-18  " : " sm:h-28 ssm2:h-40 sm2:h-[106px] md2:h-28 lg2:h-28 "
+      }  sm:gap-1 sm:px-1 md:py-2  md:flex-col md:gap-4 gap-0  flex flex-wrap font-m`}
       style={{
         textAlign: "center",
         backgroundColor: "#0F172A",
@@ -81,17 +82,18 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ setCoin, setIsModalOpenl }
         color: "white",
       }}
     >
-      <div className="sm:mx-auto flex ssm2:flex-col  gap-4 items-center">
+      <div className="sm:mx-auto flex ssm2:flex-col  gap-4 items-center ">
         <div className="  bg-slate-800  rounded-lg p-2 px-6 mr-8">
           <p
             className="font-montserrat 
-           font-bold  text-slate-300 text-2xl md:text-sm ssm2:text-sm "
+           font-bold  text-slate-300 text-2xl md:text-sm ssm2:text-sm  "
           >
             Portfolio Value : {portfolioValue.toFixed(2)}$
           </p>
         </div>
 
         <Select
+          showSearch
           className="sm:hidden "
           open={select}
           style={{
@@ -114,6 +116,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ setCoin, setIsModalOpenl }
             </Space>
           )}
         />
+        <CiBitcoin className={"sm:hidden text-slate-400"} size={40} />
       </div>
 
       {assets.length > 0 && (
@@ -141,7 +144,6 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ setCoin, setIsModalOpenl }
 
       <Drawer
         width={444}
-        headerStyle={{ backgroundColor: "#1E293B" }}
         style={{ backgroundColor: "#334155" }}
         title={<p style={{ color: "#CBD5E1" }}>Add Asset</p>}
         closeIcon={<CloseOutlined style={{ color: "#CBD5E1" }} />}

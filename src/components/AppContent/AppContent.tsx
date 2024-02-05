@@ -66,19 +66,22 @@ export const AppContent = () => {
         {!assets.length ? (
           <>
             {" "}
-            <h2
-              className="text-sky-200 text-5xl flex 
-          items-center gap-4 justify-center mt-48"
-            >
-              No Coins in Your Portfolio <PiCoinsLight size={70} />
-            </h2>
-            <Button
-              onClick={showDrawer}
-              className=" font-montserrat hover:bg-[#346ab5]  w-48 h-12 text-lg mt-10"
-              type="primary"
-            >
-              Add Asset
-            </Button>
+            <div className="flex flex-col items-center justify-center  mt-32">
+              <PiCoinsLight size={120} />
+              <h2
+                className="text-sky-200 text-6xl font-medium flex 
+          items-center gap-4 justify-center mt-6 select-none "
+              >
+                No Coins in Your Portfolio
+              </h2>
+              <Button
+                onClick={showDrawer}
+                className=" font-montserrat hover:bg-[#346ab5]  w-48 h-12 text-lg mt-10"
+                type="primary"
+              >
+                Add Asset
+              </Button>
+            </div>
           </>
         ) : isChartPieOpen ? (
           <PortfolioChart />

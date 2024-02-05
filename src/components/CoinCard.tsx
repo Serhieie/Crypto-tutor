@@ -16,7 +16,13 @@ export const CoinCard: React.FC<CoininfoModalProps> = ({ coin }) => {
         valueStyle={{
           color: (coin?.totalProfit || 0) >= -0.000001 ? "#3f8600" : "#cf1322",
         }}
-        prefix={coin?.grow ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
+        prefix={
+          (coin?.totalProfit || 0) >= -0.000001 ? (
+            <ArrowUpOutlined />
+          ) : (
+            <ArrowDownOutlined />
+          )
+        }
         suffix="$"
       />
       <List

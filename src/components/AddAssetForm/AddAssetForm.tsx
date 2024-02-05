@@ -81,6 +81,7 @@ export const AddAssetForm: React.FC<AddAssetFormProps> = ({ onCloseResult }) => 
     <>
       {" "}
       <Select
+        showSearch
         open={select}
         style={{ width: "100%", outline: "none", fontFamily: "Montserrat, sans-serif" }}
         placeholder={["Select Coin"]}
@@ -225,7 +226,9 @@ export const AddAssetForm: React.FC<AddAssetFormProps> = ({ onCloseResult }) => 
       ) : (
         <div className="w-full font-montserrat text-center flex flex-col mt-32 items-center text-slate-400">
           <PiHandCoinsLight size={200} />
-          <p className="text-slate-400 text-3xl">Add Asset to Your Portfolio</p>
+          <p className="text-slate-400 text-3xl select-none ">
+            Add Asset to Your Portfolio
+          </p>
         </div>
       )}
     </>

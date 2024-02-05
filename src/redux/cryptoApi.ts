@@ -24,10 +24,12 @@ export const cryptoApi = createApi({
     },
   }),
   tagTypes: ["Crypto"],
+  keepUnusedDataFor: 30,
   endpoints: (builder) => ({
     getAllCrypto: builder.query<GetAllCryptoResponse, void>({
-      query: () => "coins",
+      query: () => `coins?limit=120`,
       providesTags: ["Crypto"],
+      keepUnusedDataFor: 60,
     }),
 
     getCrypto: builder.query<Cryptocurrency, GetCoinInterface>({

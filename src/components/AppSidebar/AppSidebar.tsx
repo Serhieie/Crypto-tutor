@@ -1,5 +1,5 @@
 import { Typography, Statistic, List, Tag, Modal, Button } from "antd";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 import type { Cryptocurrency } from "../../redux/Cryptocurency.types";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
@@ -11,8 +11,10 @@ import {
   removeAsset,
   getIsCoinsShowed,
   getFilterValue,
+  changeAssets,
 } from "../../redux/dashboardSlice";
 import { CoinLabel } from "../CoinLabel";
+import { refetchCrypto } from "../../helpers/utils/formLogic/refetchCrypto";
 
 interface AppSidebarProps {
   setCoin: React.Dispatch<React.SetStateAction<Cryptocurrency | null>>;
@@ -27,11 +29,25 @@ interface DeleteButtonProps {
 export const AppSidebar: React.FC<AppSidebarProps> = ({ setCoin, setIsModalOpenl }) => {
   const dispatch = useDispatch();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-  const data = useGetAllCryptoQuery();
+  const { data, refetch } = useGetAllCryptoQuery();
   const isCoinShowed = useSelector(getIsCoinsShowed);
   const [coinForDelete, setCoinForDelete] = useState<DeleteButtonProps>();
   const assets = useSelector(getAssets);
   const filter = useSelector(getFilterValue);
+
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      try {
+        await refetch();
+        const updatedAssets = refetchCrypto(assets, data);
+        if (updatedAssets) dispatch(changeAssets(updatedAssets));
+      } catch (error) {
+        console.error("Error updating assets:", error);
+      }
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, [refetch, assets, data, dispatch]);
 
   const getVisibleContacts = useMemo(() => {
     const normalizedFilter = filter.toLowerCase();
@@ -55,7 +71,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ setCoin, setIsModalOpenl
       const isButton = clickedElement.id === "close-card-button";
       const cryptoId = clickedElement.dataset.cryptoId;
 
-      const selectedCoin = data.data?.result.find(
+      const selectedCoin = data?.result.find(
         (crypto) => crypto.id === (event.currentTarget as HTMLDivElement).id
       );
       if (selectedCoin)
@@ -80,9 +96,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ setCoin, setIsModalOpenl
     if (data) {
       const buttonId = event.currentTarget.id;
       const buttonDataSetId = event.currentTarget.dataset.delete;
-      const selectedCoin = data.data?.result.find(
-        (crypto) => crypto.id === buttonDataSetId
-      );
+      const selectedCoin = data?.result.find((crypto) => crypto.id === buttonDataSetId);
 
       if (buttonId === "delete-btn" && selectedCoin) {
         dispatch(removeAsset(selectedCoin.id));
@@ -97,8 +111,8 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ setCoin, setIsModalOpenl
       ${assets.length ? " grid " : " hidden "}
       ${
         isCoinShowed
-          ? " w-[100%]    grid-cols-1 ssm2:grid-cols-1 md:grid-cols-2 md3:grid-cols-3 1xl2:grid-cols-4 gap-2  gap-y-2 p-2  auto-rows-min   "
-          : " w-[22%] grid-cols-1 gap-2 lg:hidden auto-rows-max  rounded-2xl overflow-hidden pr-1 "
+          ? " w-[100%] grid-cols-1 ssm2:grid-cols-1 md:grid-cols-2 md3:grid-cols-3 1xl2:grid-cols-4 gap-2  gap-y-2 p-2  auto-rows-min "
+          : " w-[22%] grid-cols-1 gap-2 lg:hidden auto-rows-max rounded-2xl overflow-hidden pr-1 "
       }
           overflow-y-scroll   h-[calc(100vh-86px)]
         bg-[#0F172A]  grid   `}

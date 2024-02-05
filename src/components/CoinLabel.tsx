@@ -29,7 +29,12 @@ export const CoinLabel: React.FC<CoinLabelProps> = ({
         />
       )}
       <Typography.Title
-        style={{ margin: 0, color: color, fontFamily: "Montserrat, sans-serif" }}
+        style={{
+          margin: 0,
+          color: color,
+          fontFamily: "Montserrat, sans-serif",
+          userSelect: "none",
+        }}
         level={level}
       >
         <span>({coinSymbol ? coinSymbol : null})</span> {coinName ? coinName : null}
