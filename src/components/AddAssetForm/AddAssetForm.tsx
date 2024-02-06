@@ -12,6 +12,11 @@ import { validateMessages } from "./validationMessages";
 import { Select, Space, Divider, Form, DatePicker, Button, InputNumber } from "antd";
 import { ResultComponent } from "./ResultComponent";
 
+//This Component Response for adding asset at the drawer from right sight
+//For Form used librery ant design
+//At submit two logic 1) we have no coin 2) we are adding more coins
+//This Prop is close drower function witch is trigger it after submitting
+
 export const AddAssetForm: React.FC<AddAssetFormProps> = ({ onCloseResult }) => {
   const dispatch = useDispatch();
   const { data } = useGetAllCryptoQuery();
@@ -48,18 +53,15 @@ export const AddAssetForm: React.FC<AddAssetFormProps> = ({ onCloseResult }) => 
       form.setFieldValue("total", (value * price).toFixed(4));
     }
   };
-
   const handleAmountPrice = (value: number | null) => {
     if (value !== null) {
       const amount = form.getFieldValue("amount");
       form.setFieldValue("total", (amount * value).toFixed(4));
     }
   };
-
   const onBuyMore = () => {
     setIsResultVisible(false);
   };
-
   const handleSelect = (value: string | number) => {
     const selectedCoin = data?.result.find((coin) => coin.id === value);
     setCoin(selectedCoin);

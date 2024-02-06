@@ -56,6 +56,14 @@ body {
   color: #cbd5e1;
 }
 
+#amount-of-asset::-webkit-inner-spin-button,
+#amount-of-asset::-webkit-outer-spin-button {
+  height: 40px;
+  margin: 0;
+  transition: all 300ms ease-in-out;
+  display: none;
+}
+
 button,
 [type="button"],
 [type="reset"],
@@ -67,6 +75,10 @@ button,
 
 #delete-btn {
   background-color: #e11d48;
+}
+
+#open-chart-btn {
+  background-color: transparent;
 }
 
 #cancel-btn,

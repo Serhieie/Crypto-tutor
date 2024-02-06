@@ -32,7 +32,6 @@ export const mapAssets = (
             (asset.amount ?? 0) * (asset.price ?? 0),
           name: coin.name,
         };
-        console.log("First operation", obj);
         return obj;
       }
       return asset;

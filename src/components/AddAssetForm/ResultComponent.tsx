@@ -1,6 +1,7 @@
 import { Button, Result } from "antd";
 import type { ResultComponentProps } from "./AddAssetForm.types";
 
+//Result component witch ussing for form submit
 export const ResultComponent: React.FC<ResultComponentProps> = ({
   onCloseResult,
   onBuyMore,

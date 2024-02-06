@@ -1,40 +1,42 @@
-import { Typography, Statistic, List, Tag, Modal, Button } from "antd";
+import { SideBarStatistic } from "./CardStatistic";
+import { CardList } from "./CardList";
+import { CardHeader } from "./CardHeader";
 import { useState, useMemo, useEffect } from "react";
-
+import { changeAssetAmount } from "../../helpers/utils/formLogic/changeAssetAmount";
 import type { Cryptocurrency } from "../../redux/Cryptocurency.types";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { useGetAllCryptoQuery } from "../../redux/cryptoApi";
-import { RiDeleteBackLine } from "react-icons/ri";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getAssets,
-  removeAsset,
   getIsCoinsShowed,
   getFilterValue,
   changeAssets,
+  setAssetToShow,
+  setIsCoinsShowed,
+  setIsChartLineOpen,
+  setIsChartPieOpen,
+  setIsTableOpen,
+  getIsDeleteModalOpen,
+  setIsDeleteModalOpen,
 } from "../../redux/dashboardSlice";
-import { CoinLabel } from "../CoinLabel";
 import { refetchCrypto } from "../../helpers/utils/formLogic/refetchCrypto";
+import { DeleteModal } from "./DeleteModal/DeleteModal";
 
 interface AppSidebarProps {
   setCoin: React.Dispatch<React.SetStateAction<Cryptocurrency | null>>;
   setIsModalOpenl: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-interface DeleteButtonProps {
-  name: string;
-  id: string;
-}
-
 export const AppSidebar: React.FC<AppSidebarProps> = ({ setCoin, setIsModalOpenl }) => {
   const dispatch = useDispatch();
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const isDeleteModalOpen = useSelector(getIsDeleteModalOpen);
   const { data, refetch } = useGetAllCryptoQuery();
   const isCoinShowed = useSelector(getIsCoinsShowed);
-  const [coinForDelete, setCoinForDelete] = useState<DeleteButtonProps>();
+  const [coinForUpdate, setCoinForUpdate] = useState<Cryptocurrency>();
   const assets = useSelector(getAssets);
   const filter = useSelector(getFilterValue);
 
+  //every 60 sec updating data and changing coin price
   useEffect(() => {
     const intervalId = setInterval(async () => {
       try {
@@ -45,63 +47,68 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ setCoin, setIsModalOpenl
         console.error("Error updating assets:", error);
       }
     }, 60000);
-
     return () => clearInterval(intervalId);
   }, [refetch, assets, data, dispatch]);
 
+  //filter func
   const getVisibleContacts = useMemo(() => {
     const normalizedFilter = filter.toLowerCase();
     if (!Array.isArray(assets)) {
       return [];
     }
-
     const filteredContacts = assets.filter(
       ({ id, name }) =>
         id?.toLowerCase().includes(normalizedFilter) ||
         name?.toLowerCase().includes(normalizedFilter)
     );
-
     return filteredContacts;
   }, [assets, filter]);
 
+  //Main Card logic with modals and global state
   const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (isDeleteModalOpen) return;
+
     if (data) {
       const clickedElement = event.target as HTMLElement;
       const isButton = clickedElement.id === "close-card-button";
+      const isInput = clickedElement.id === `amount-of-asset`;
+      const isChartBtn = clickedElement.id === `open-chart-btn`;
       const cryptoId = clickedElement.dataset.cryptoId;
-
       const selectedCoin = data?.result.find(
         (crypto) => crypto.id === (event.currentTarget as HTMLDivElement).id
       );
-      if (selectedCoin)
-        setCoinForDelete({ name: selectedCoin.name, id: selectedCoin.id });
+      //finding coin at data for updating
+      if (selectedCoin) setCoinForUpdate({ ...selectedCoin });
 
-      if (selectedCoin && !isButton) {
+      //setting id to chart and show chart line after pressing chart btn
+      if (isChartBtn && selectedCoin) {
+        dispatch(setAssetToShow(selectedCoin.id));
+        dispatch(setIsCoinsShowed(false));
+        dispatch(setIsChartPieOpen(false));
+        dispatch(setIsTableOpen(false));
+        dispatch(setIsChartLineOpen(true));
+      }
+      //let to input number
+      else if (isInput) return;
+      //add toin to modal and open it
+      else if (selectedCoin && !isButton) {
         setIsModalOpenl(true);
         setCoin(selectedCoin);
-      } else if (isButton && cryptoId) {
-        setIsDeleteModalOpen((state) => !state);
+      }
+      //handle delete asset
+      else if (isButton && cryptoId) {
+        dispatch(setIsDeleteModalOpen());
       }
     }
   };
 
-  const handleCloseDeleteModal = () => {
-    setIsDeleteModalOpen((state) => !state);
-  };
-
-  const handleDeleteAtDeleteModal = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    if (data) {
-      const buttonId = event.currentTarget.id;
-      const buttonDataSetId = event.currentTarget.dataset.delete;
-      const selectedCoin = data?.result.find((crypto) => crypto.id === buttonDataSetId);
-
-      if (buttonId === "delete-btn" && selectedCoin) {
-        dispatch(removeAsset(selectedCoin.id));
-        setIsDeleteModalOpen((state) => !state);
-      }
+  //changing amount of asset BUT without updating priceAvr and Price
+  const handleChangeAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (coinForUpdate) {
+      const newAmount = Number(event.target.value);
+      if (isNaN(newAmount)) return;
+      const changedAsset = changeAssetAmount(assets, coinForUpdate, newAmount);
+      if (changedAsset) dispatch(changeAssets([...changedAsset]));
     }
   };
 
@@ -126,102 +133,12 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ setCoin, setIsModalOpenl
           id={asset.id}
           key={asset.id}
         >
-          <div className="flex    justify-between p-2 rounded-xl ">
-            {asset && (
-              <CoinLabel
-                coinName={asset.name}
-                coinSymbol={asset.symbol}
-                coinIcon={asset.icon}
-                size={30}
-                level={4}
-                marg={10}
-              />
-            )}
-            <button
-              id="close-card-button"
-              data-crypto-id={asset.id}
-              type="button"
-              className="bg-green p-1 "
-            >
-              <RiDeleteBackLine className=" pointer-events-none" size={24} />
-            </button>
-          </div>
-
-          <Statistic
-            value={asset.totalAmount}
-            precision={2}
-            valueStyle={{
-              marginTop: 6,
-              marginLeft: 16,
-              color: (asset.totalProfit || 0) >= -0.000001 ? "#3f8600" : "#cf1322",
-            }}
-            prefix={
-              (asset.totalProfit || 0) >= -0.000001 ? (
-                <ArrowUpOutlined />
-              ) : (
-                <ArrowDownOutlined />
-              )
-            }
-            suffix="$"
-          />
-          <List
-            size="small"
-            dataSource={[
-              { title: "Total Profit", value: asset.totalProfit, withTag: true },
-              { title: "Asset Amount", value: asset.amount, isPlain: true },
-            ]}
-            renderItem={(item) => (
-              <List.Item>
-                <span className=" font-xs font-bold"> {item.title}</span>
-                <span className=" font-xs font-bold">
-                  {item.withTag && (
-                    <Tag color={(asset.totalProfit || 0) >= -0.000001 ? "green" : "red"}>
-                      {asset.growPercent}%
-                    </Tag>
-                  )}
-                  {item.isPlain && item.value}
-                  {!item.isPlain && (
-                    <Typography.Text
-                      type={(asset.totalProfit || 0) >= -0.000001 ? "success" : "danger"}
-                    >
-                      {" "}
-                      {item.value?.toFixed(2)}$
-                    </Typography.Text>
-                  )}
-                </span>
-              </List.Item>
-            )}
-          />
+          <CardHeader asset={asset} />
+          <SideBarStatistic asset={asset} />
+          <CardList asset={asset} handleChangeAmount={handleChangeAmount} />
         </div>
       ))}
-      <Modal open={isDeleteModalOpen} onCancel={handleCloseDeleteModal} footer={null}>
-        <div className="flex flex-col gap-14 py-4 ">
-          <p className="text-center font-bold text-xl m-0 p-0  pointer-events-none ">
-            Confirm{" "}
-            <span className="text-2xl text-sky-600 mx-1">{coinForDelete?.name}</span>{" "}
-            Asset Delete
-          </p>
-          <div className="flex gap-10 justify-center">
-            <Button
-              onClick={handleDeleteAtDeleteModal}
-              id="delete-btn"
-              data-delete={`${coinForDelete?.id}`}
-              className=" hover:bg-[#346ab5] mr-2 h-12 px-6"
-              type="primary"
-            >
-              Delete Asset
-            </Button>
-            <Button
-              onClick={handleCloseDeleteModal}
-              id="cancel-btn"
-              className=" bg-rose-500 hover:bg-[#346ab5] h-12 px-6"
-              type="primary"
-            >
-              Close
-            </Button>
-          </div>
-        </div>
-      </Modal>
+      <DeleteModal data={data} coinForUpdate={coinForUpdate} />
     </div>
   );
 };

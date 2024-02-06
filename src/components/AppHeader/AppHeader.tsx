@@ -66,7 +66,8 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ setCoin, setIsModalOpenl }
     .reduce((acc, value) => acc + value, 0);
 
   const handleShowCoins = () => {
-    dispatch(setIsCoinsShowed());
+    if (!isCoinsShowed) dispatch(setIsCoinsShowed(true));
+    else dispatch(setIsCoinsShowed(false));
   };
 
   return (
@@ -74,7 +75,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ setCoin, setIsModalOpenl }
       className={`
       ${
         !assets.length ? " h-18  " : " sm:h-28 ssm2:h-40 sm2:h-[106px] md2:h-28 lg2:h-28 "
-      }  sm:gap-1 sm:px-1 md:py-2  md:flex-col md:gap-4 gap-0  flex flex-wrap font-m`}
+      }  sm:gap-1 sm:px-1 md:py-2   md:gap-4 gap-0  flex flex-wrap font-m`}
       style={{
         textAlign: "center",
         backgroundColor: "#0F172A",
@@ -86,7 +87,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ setCoin, setIsModalOpenl }
         <div className="  bg-slate-800  rounded-lg p-2 px-6 mr-8">
           <p
             className="font-montserrat 
-           font-bold  text-slate-300 text-2xl md:text-sm ssm2:text-sm  "
+           font-bold  text-slate-300 text-xl md:text-sm ssm2:text-xs  "
           >
             Portfolio Value : {portfolioValue.toFixed(2)}$
           </p>

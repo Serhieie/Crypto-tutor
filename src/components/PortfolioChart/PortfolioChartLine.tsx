@@ -1,5 +1,8 @@
+import React, { useState, useEffect } from "react";
+import { Line } from "react-chartjs-2";
+import { useGetCryptoChartQuery } from "../../redux/cryptoApi";
 import {
-  Chart as ChartJS,
+  Chart,
   CategoryScale,
   LinearScale,
   PointElement,
@@ -8,13 +11,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useSelector } from "react-redux";
-import { getAssets } from "../../redux/dashboardSlice";
-import { Line } from "react-chartjs-2";
-import { generateRandomColor } from "../../helpers/generateRandomColor";
-import { useGetAllCryptoQuery } from "../../redux/cryptoApi";
 
-ChartJS.register(
+Chart.register(
   CategoryScale,
   LinearScale,
   PointElement,
@@ -24,11 +22,15 @@ ChartJS.register(
   Legend
 );
 
-export const PortfolioChartLine = () => {
-  const { data } = useGetAllCryptoQuery();
-  const assets = useSelector(getAssets);
+interface PortfolioChartLineProps {
+  id: string | null;
+}
 
-  console.log(data, assets);
+export const PortfolioChartLine: React.FC<PortfolioChartLineProps> = ({ id }) => {
+  const { data, isLoading, isError } = useGetCryptoChartQuery({
+    id,
+    period: "24h",
+  });
 
   const options = {
     responsive: true,
@@ -43,25 +45,56 @@ export const PortfolioChartLine = () => {
     },
   };
 
-  const labels = ["January", "February", "March", "April", "May", "June", "July"];
+  const [chartData, setChartData] = useState<{
+    labels: (string | never)[];
+    datasets: (
+      | { label: string | undefined; data: (number | null)[]; backgroundColor: string }
+      | never
+    )[];
+  }>({
+    labels: [],
+    datasets: [],
+  });
 
-  const chartLineData = {
-    labels,
-    datasets: assets.map((asset) => {
-      const { borderColor, backgroundColor } = generateRandomColor();
-      console.log(asset.date);
-      return {
-        label: asset.name,
-        data: asset.date,
-        borderColor,
-        backgroundColor,
-      };
-    }),
-  };
+  useEffect(() => {
+    if (!isLoading && !isError && Array.isArray(data)) {
+      const trueData = [...data];
+
+      const labels = trueData.map((entry) => {
+        if (Array.isArray(entry)) {
+          const timestamp = entry[0];
+          const date = new Date(timestamp * 1000);
+          const hours = date.getHours().toString().padStart(2, "0");
+          const minutes = date.getMinutes().toString().padStart(2, "0");
+          return `${hours}:${minutes}`;
+        }
+        return "";
+      });
+
+      const datasets = [
+        {
+          label: id || undefined, // Replace null with undefined
+          data: trueData.map((entry) => {
+            if (Array.isArray(entry) && entry.length >= 2) {
+              return entry[1];
+            }
+            return 0;
+          }),
+          borderColor: "rgba(0, 255, 110, 0.2)",
+          backgroundColor: "rgba(0, 255, 110, 0.5)",
+        },
+      ];
+
+      setChartData({ labels, datasets });
+    }
+  }, [data, isLoading, isError, id]);
+
+  if (isLoading) return <div className="mt-40">Loading...</div>;
+  if (isError) return <div className="mt-40">Error fetching data</div>;
 
   return (
     <div className="mt-1 flex justify-center h-[500px]">
-      <Line options={options} data={chartLineData} />
+      <Line options={options} data={chartData} />
     </div>
   );
 };

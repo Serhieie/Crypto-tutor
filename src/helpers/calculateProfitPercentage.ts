@@ -4,7 +4,11 @@ export const calculateProfitPercentage = (
 ): number => {
   const profit = currentInvestment - initialInvestment;
 
-  if (initialInvestment === 0) {
+  if (
+    initialInvestment === 0 ||
+    isNaN(initialInvestment) ||
+    initialInvestment === Infinity
+  ) {
     return 0;
   }
 

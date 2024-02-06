@@ -10,7 +10,7 @@ interface GetCoinInterface {
 }
 
 interface GetChartInterface {
-  id: string;
+  id: string | null;
   period: string;
 }
 
@@ -27,7 +27,7 @@ export const cryptoApi = createApi({
   keepUnusedDataFor: 30,
   endpoints: (builder) => ({
     getAllCrypto: builder.query<GetAllCryptoResponse, void>({
-      query: () => `coins?limit=120`,
+      query: () => `coins?limit=150`,
       providesTags: ["Crypto"],
       keepUnusedDataFor: 60,
     }),
@@ -37,7 +37,7 @@ export const cryptoApi = createApi({
       providesTags: ["Crypto"],
     }),
 
-    getCryptoChart: builder.query<number[], GetChartInterface>({
+    getCryptoChart: builder.query<string, GetChartInterface>({
       query: ({ id, period }) => `coins/${id}/charts?period=${period}`,
       providesTags: ["Crypto"],
     }),
