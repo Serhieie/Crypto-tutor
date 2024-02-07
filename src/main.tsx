@@ -13,7 +13,7 @@ if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
       <Provider store={store}>
-        <HashRouter basename="Crypto-tutor">
+        <HashRouter>
           {/* <BrowserRouter basename="/Crypto-tutor"> */}
           <PersistGate loading={null} persistor={persistor}>
             <App />
