@@ -30,28 +30,28 @@ const App: React.FC = () => {
     <SuspenseLoader />
   ) : (
     <Routes>
-      <Route path="#/" element={<AppLayout />}>
+      <Route path="/" element={<AppLayout />}>
         <Route
-          index
+          path="/"
           element={
-            <RestrictedRoute redirectTo="#/crypto">
+            <RestrictedRoute redirectTo="/crypto">
               <Login />
             </RestrictedRoute>
           }
         />
         <Route
-          path="#/registration"
+          path="/registration"
           element={
-            <RestrictedRoute redirectTo="#/crypto">
+            <RestrictedRoute redirectTo="/crypto">
               <Registration />
             </RestrictedRoute>
           }
         />
 
         <Route
-          path="#/crypto"
+          path="/crypto"
           element={
-            <PrivateRoute redirectTo="#/">
+            <PrivateRoute redirectTo="/">
               <Crypto />
             </PrivateRoute>
           }
