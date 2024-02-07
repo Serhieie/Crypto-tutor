@@ -15,7 +15,10 @@ const Crypto = lazy(() => import("./components/AppLayout/MainContent"));
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
-  const { isRefreshing } = useAuth();
+  const { isRefreshing, isLoggedIn } = useAuth();
+
+  console.log("refreshing", isRefreshing);
+  console.log("isLoggedIn", isLoggedIn);
 
   //fetch current user
   useEffect(() => {
@@ -29,7 +32,7 @@ const App: React.FC = () => {
     <Routes>
       <Route path="/" element={<AppLayout />}>
         <Route
-          path="/"
+          index
           element={
             <RestrictedRoute redirectTo="/crypto">
               <Login />
