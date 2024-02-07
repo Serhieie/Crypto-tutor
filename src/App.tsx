@@ -29,7 +29,7 @@ const App: React.FC = () => {
     <Routes>
       <Route path="/" element={<AppLayout />}>
         <Route
-          path="/"
+          index
           element={
             <RestrictedRoute redirectTo="/crypto">
               <Login />
