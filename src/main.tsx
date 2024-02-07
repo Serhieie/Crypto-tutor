@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { PersistGate } from "redux-persist/integration/react";
-import { BrowserRouter } from "react-router-dom";
+// import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import App from "./App.tsx";
 import "./index.css";
 import { Provider } from "react-redux";
@@ -12,11 +13,13 @@ if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
       <Provider store={store}>
-        <BrowserRouter basename="/Crypto-tutor">
+        <HashRouter basename="Crypto-tutor">
+          {/* <BrowserRouter basename="/Crypto-tutor"> */}
           <PersistGate loading={null} persistor={persistor}>
             <App />
           </PersistGate>
-        </BrowserRouter>
+          {/* </BrowserRouter> */}
+        </HashRouter>
       </Provider>
     </React.StrictMode>
   );
