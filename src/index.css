@@ -15,24 +15,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+input:-webkit-autofill {
+  background-color: #64748b;
+}
+
 body {
   background-color: #0f172a;
-}
-
-@media (max-width: 768px) {
-  .responsive-layout {
-    flex-direction: column;
-  }
-
-  .sider-top {
-    order: -1;
-  }
-}
-
-@media (min-width: 1200px) {
-  .sider-top .ant-layout-sider-zero-width-trigger {
-    display: none;
-  }
 }
 
 #close-card-button {
@@ -89,4 +77,50 @@ button,
 
 #delete-btn:hover {
   background-color: #f43f5e;
+}
+
+#login-psw-btn,
+#reg-psw-btn,
+#reg-conf-psw-btn {
+  background-color: #64748b;
+}
+
+#log-btn,
+#reg-btn {
+  background-color: #1e3a8a;
+}
+
+#log-btn:hover,
+#reg-btn:hover {
+  background-color: #1d4ed8;
+}
+
+.custom-table .ant-table-cell {
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+}
+
+@media (max-width: 768px) {
+  .responsive-layout {
+    flex-direction: column;
+  }
+
+  .sider-top {
+    order: -1;
+  }
+
+  .custom-table .ant-table-cell {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .sider-top .ant-layout-sider-zero-width-trigger {
+    display: none;
+  }
+}
+
+.active {
+  color: #1677ff;
+  opacity: 0.85;
 }

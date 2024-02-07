@@ -1,4 +1,4 @@
-import { Button, Spin } from "antd";
+import { Button } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { PortfolioChart } from "../PortfolioChart/PortfolioChart";
 import { AssetsTable } from "../AssetsTable";
@@ -17,6 +17,7 @@ import {
   setIsTableOpen,
 } from "../../redux/dashboardSlice";
 import { PortfolioChartLine } from "../PortfolioChart/PortfolioChartLine";
+import { ContentLoader } from "../Loaders/ContentLoader";
 
 //main window with Charts and buttons eatch button using global state
 // for toggle it
@@ -54,22 +55,7 @@ export const AppContent = () => {
   };
 
   if (isLoading) {
-    return (
-      <div
-        className={`
-        ${isCoinShowed && assets.length > 0 ? " hidden " : " "}
-      ${!assets.length ? " w-[100%] " : "  w-[78%]  lg:w-[100%] "}
-      text-center   h-full min-h-[calc(100vh-86px)]
-       text-sky-200 bg-[#1E293B] p-4 transition-all rounded-2xl overflow-hidden `}
-      >
-        <div
-          className="flex items-center justify-center 
-        h-full w-[100%] mt-72"
-        >
-          <Spin size="large" />
-        </div>
-      </div>
-    );
+    return <ContentLoader />;
   }
 
   return (
@@ -88,7 +74,7 @@ export const AppContent = () => {
               type="primary"
               style={{ margin: 0 }}
             >
-              Show at Pie Chart
+              Pie Chart
             </Button>
             {assets.length > 0 && assetToShowId && (
               <Button
@@ -97,7 +83,7 @@ export const AppContent = () => {
                 type="primary"
                 style={{ margin: 0 }}
               >
-                Show at Line Chart
+                Dots Chart
               </Button>
             )}
             <Button

@@ -1,6 +1,6 @@
 import { Statistic } from "antd";
 import { CommonAsset } from "../../redux/Cryptocurency.types";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { PiChartLineDownBold, PiChartLineUpBold } from "react-icons/pi";
 import { FaChartArea } from "react-icons/fa";
 
 interface SideBarStatisticProps {
@@ -18,12 +18,14 @@ export const SideBarStatistic: React.FC<SideBarStatisticProps> = ({ asset }) => 
           marginTop: 6,
           marginLeft: 16,
           color: (asset.totalProfit || 0) >= -0.000001 ? "#3f8600" : "#cf1322",
+          display: "flex",
+          alignItems: "center",
         }}
         prefix={
           (asset.totalProfit || 0) >= -0.000001 ? (
-            <ArrowUpOutlined />
+            <PiChartLineUpBold />
           ) : (
-            <ArrowDownOutlined />
+            <PiChartLineDownBold />
           )
         }
         suffix="$"

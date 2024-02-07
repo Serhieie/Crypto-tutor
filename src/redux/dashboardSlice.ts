@@ -13,11 +13,14 @@ export const dashboardSlice = createSlice({
     setIsLoading(state) {
       state.isLoading = !state.isLoading;
     },
-    setIsModalOpen(state) {
-      state.isModalOpen = !state.isLoading;
+    setIsModalOpen(state, action: PayloadAction<boolean>) {
+      state.isModalOpen = action.payload;
     },
     setIsDeleteModalOpen(state) {
       state.isDeleteModalOpen = !state.isDeleteModalOpen;
+    },
+    setShowPassword(state) {
+      state.showPassword = !state.showPassword;
     },
     setIsCoinsShowed(state, action: PayloadAction<boolean>) {
       state.showCoins = action.payload;
@@ -27,6 +30,9 @@ export const dashboardSlice = createSlice({
     },
     setCoinForUpdate(state, action: PayloadAction<Cryptocurrency>) {
       state.coinForUpdate = action.payload;
+    },
+    setCoin(state, action: PayloadAction<Cryptocurrency>) {
+      state.coin = action.payload;
     },
     setIsChartLineOpen(state, action: PayloadAction<boolean>) {
       state.isChartLineOpen = action.payload;
@@ -83,6 +89,8 @@ export const {
   setIsChartPieOpen,
   setIsTableOpen,
   setIsDeleteModalOpen,
+  setShowPassword,
+  setCoin,
 } = dashboardSlice.actions;
 
 export const getIsLoading = (state: { dashboard: CryptoState }) =>
@@ -107,5 +115,8 @@ export const getIsChartPieOpen = (state: { dashboard: CryptoState }) =>
   state.dashboard.isChartPieOpen;
 export const getIsTableOpen = (state: { dashboard: CryptoState }) =>
   state.dashboard.isTableOpen;
+export const getShowPassword = (state: { dashboard: CryptoState }) =>
+  state.dashboard.showPassword;
+export const getCoin = (state: { dashboard: CryptoState }) => state.dashboard.coin;
 
 export default dashboardSlice.reducer;

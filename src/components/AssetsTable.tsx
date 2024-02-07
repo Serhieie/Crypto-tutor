@@ -39,6 +39,9 @@ export const AssetsTable = () => {
     name: asset?.name,
     price: asset?.price,
     amount: asset?.amount,
+    cellFontSizeSM: 20,
+    cellFontSizeMD: 40,
+    cellFontSize: 40,
   }));
 
   return (
@@ -52,6 +55,7 @@ export const AssetsTable = () => {
       pagination={false}
       columns={columns}
       dataSource={dataAssets}
+      className="text-xl font-bold custom-table"
     />
   );
 };

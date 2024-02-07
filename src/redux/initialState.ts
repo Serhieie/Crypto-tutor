@@ -13,6 +13,8 @@ export interface CryptoState {
   isChartPieOpen: boolean;
   isTableOpen: boolean;
   isDeleteModalOpen: boolean;
+  showPassword: boolean;
+  coin: Cryptocurrency | null;
 }
 
 export const initialState: CryptoState = {
@@ -28,4 +30,6 @@ export const initialState: CryptoState = {
   isChartPieOpen: true,
   isTableOpen: false,
   isDeleteModalOpen: false,
+  showPassword: false,
+  coin: null,
 };

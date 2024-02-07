@@ -1,32 +1,28 @@
-import { Layout, Button, Select, Space, Drawer } from "antd";
+import { Layout, Select, Space, Drawer } from "antd";
+import { ButtonSet } from "./ButtonSet";
 import { Filter } from "../Fliter";
 import { CloseOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { AppHeaderProps } from "./AppHeader.types";
 import { AddAssetForm } from "../AddAssetForm/AddAssetForm";
 import { useGetAllCryptoQuery } from "../../redux/cryptoApi";
+
 import { CiBitcoin } from "react-icons/ci";
 import {
   getAssets,
-  setIsCoinsShowed,
-  getIsCoinsShowed,
   setIsDrawerOpen,
   getIsDrawerOpen,
+  setCoin,
+  setIsModalOpen,
 } from "../../redux/dashboardSlice";
 import { useDispatch } from "react-redux";
 
-export const AppHeader: React.FC<AppHeaderProps> = ({ setCoin, setIsModalOpenl }) => {
+export const AppHeader: React.FC = () => {
   const dispatch = useDispatch();
   const [select, setSelect] = useState<boolean>(false);
   const isDrawerOpen = useSelector(getIsDrawerOpen);
   const { data } = useGetAllCryptoQuery();
   const assets = useSelector(getAssets);
-  const isCoinsShowed = useSelector(getIsCoinsShowed);
-
-  const showDrawer = () => {
-    dispatch(setIsDrawerOpen(true));
-  };
 
   const onCloseDrawer = () => {
     dispatch(setIsDrawerOpen(false));
@@ -44,8 +40,8 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ setCoin, setIsModalOpenl }
 
   const handleSelect = (value: string | number) => {
     const selectedCoin = data?.result.find((crypto) => crypto.id === value);
-    setCoin(selectedCoin || null);
-    setIsModalOpenl(true);
+    if (selectedCoin) dispatch(setCoin(selectedCoin));
+    dispatch(setIsModalOpen(true));
   };
 
   const cryptoCardMap: Record<string, number> | undefined = data?.result.reduce(
@@ -65,29 +61,26 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ setCoin, setIsModalOpenl }
     })
     .reduce((acc, value) => acc + value, 0);
 
-  const handleShowCoins = () => {
-    if (!isCoinsShowed) dispatch(setIsCoinsShowed(true));
-    else dispatch(setIsCoinsShowed(false));
-  };
-
   return (
     <Layout.Header
       className={`
       ${
-        !assets.length ? " h-18  " : " sm:h-28 ssm2:h-40 sm2:h-[106px] md2:h-28 lg2:h-28 "
-      }  sm:gap-1 sm:px-1 md:py-2   md:gap-4 gap-0  flex flex-wrap font-m`}
+        !assets.length ? " h-18  " : " md:h-40 md2:h-28 lg2:h-28 "
+      }  sm:gap-1 sm:px-1 md:py-2   md:gap-3 gap-0  flex md:flex-col 
+      md3:flex-wrap  shadow-md  shadow-shadowBoxDark  `}
       style={{
         textAlign: "center",
         backgroundColor: "#0F172A",
         alignItems: "center",
         color: "white",
+        boxShadow: "",
       }}
     >
-      <div className="sm:mx-auto flex ssm2:flex-col  gap-4 items-center ">
-        <div className="  bg-slate-800  rounded-lg p-2 px-6 mr-8">
+      <div className="sm:mx-auto flex  gap-3 items-center ">
+        <div className="  bg-slate-800  rounded-lg p-2 px-6 mr-1">
           <p
             className="font-montserrat 
-           font-bold  text-slate-300 text-xl md:text-sm ssm2:text-xs  "
+           font-bold  text-slate-300 text-xl md:text-xs  "
           >
             Portfolio Value : {portfolioValue.toFixed(2)}$
           </p>
@@ -119,29 +112,17 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ setCoin, setIsModalOpenl }
         />
         <CiBitcoin className={"sm:hidden text-slate-400"} size={40} />
       </div>
-
-      {assets.length > 0 && (
-        <div className="flex items-center  sm2:gap-8 lg:mx-auto sm:flex sm:gap-4 ssm2:flex-col   ml-auto p-0 gap-6">
-          <Filter />
-          <div className="ml-3 mr-2 flex  1xl2:flex-row gap-4">
-            {" "}
-            <Button
-              onClick={handleShowCoins}
-              className=" bg-[#1677ff] hover:bg-[#346ab5]  font-medium font-montserrat "
-              type="primary"
-            >
-              {isCoinsShowed ? " Show Chart & Table " : " Show My Coins "}
-            </Button>
-            <Button
-              onClick={showDrawer}
-              className=" bg-[#1677ff] hover:bg-[#346ab5] font-montserrat font-medium "
-              type="primary"
-            >
-              Add Asset
-            </Button>
+      <div className="flex gap-2 ml-auto md:flex-col-reverse md:mx-auto  ">
+        {assets.length > 0 && (
+          <div
+            className="flex items-center  lg:mx-auto sm:flex 
+          md:gap-3 md:flex-col-reverse  p-0 gap-6"
+          >
+            <Filter />
           </div>
-        </div>
-      )}
+        )}
+        <ButtonSet />
+      </div>
 
       <Drawer
         width={444}

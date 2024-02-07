@@ -1,32 +1,26 @@
-import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Layout, Spin, Modal } from "antd";
+import { Outlet } from "react-router-dom";
+import { Suspense } from "react";
+import { Layout, Spin } from "antd";
 import { AppHeader } from "../AppHeader/AppHeader";
-import { AppSidebar } from "../AppSidebar/AppSidebar";
-import { AppContent } from "../AppContent/AppContent";
-import { CoinInfoModal } from "../CoinInfoModal";
-import { Cryptocurrency } from "../AppSidebar/AppSideBar.types";
 import { getIsLoading } from "../../redux/dashboardSlice";
+import { useAuth } from "../../helpers/hooks/authSelector";
+import { AuthNav } from "./AuthNavigation";
 
-export const AppLayout: React.FC = () => {
-  const [isModalOpen, setIsModalOpenl] = useState<boolean>(false);
-  const [coin, setCoin] = useState<Cryptocurrency | null>(null);
+const AppLayout: React.FC = () => {
   const isLoading = useSelector(getIsLoading);
-  const handleCancel = () => {
-    setIsModalOpenl(false);
-  };
-
+  const { token, isLoggedIn } = useAuth();
   if (isLoading) return <Spin size="large" fullscreen />;
   return (
     <Layout>
-      <AppHeader setCoin={setCoin} setIsModalOpenl={setIsModalOpenl} />
-      <div className="flex pb-4 pt-2 px-4 bg-[#0F172A]  ">
-        <AppSidebar setCoin={setCoin} setIsModalOpenl={setIsModalOpenl} />
-        <AppContent />
+      {token && isLoggedIn ? <AppHeader /> : <AuthNav />}
+      <div className="flex justify-center items-center pb-4 pt-2 px-4 bg-[#1E293B] min-h-[calc(100vh-76px)] ">
+        <Suspense fallback={<Spin size="large" fullscreen />}>
+          <Outlet />
+        </Suspense>
       </div>
-      <Modal open={isModalOpen} onCancel={handleCancel} footer={null}>
-        <CoinInfoModal coin={coin} />
-      </Modal>
     </Layout>
   );
 };
+
+export default AppLayout;

@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { changeFilterValue, getFilterValue } from "../redux/dashboardSlice";
+import { BsFilterRight } from "react-icons/bs";
 import { useSelector } from "react-redux";
 
 export const Filter: React.FC = () => {
@@ -12,15 +13,15 @@ export const Filter: React.FC = () => {
   };
 
   return (
-    <div className="flex w-full  items-center  lg:mx-auto ssm:w-[260px] sm:w-[200px] ">
+    <div className="flex w-full justify-center  items-center md3:mr-10   ">
       <label
-        className=" text-slate-400 sm:text-md text-xl mr-4 font-montserrat font-medium "
+        className=" text-slate-500 sm:text-sm text-xl mr-0.5 font-montserrat font-medium "
         htmlFor="filterInput"
       >
-        Filter:
+        <BsFilterRight size={40} />
       </label>
       <input
-        className="h-9 outline-none border-none ssm2:w-72 ssm:w-72 sm:w-28  w-52 
+        className="h-9 outline-none border-none ssm2:w-52  md:w-80  w-52
         rounded-md text-slate-300 bg-slate-600 font-montserrat px-2 "
         onChange={onFilterChange}
         type="text"

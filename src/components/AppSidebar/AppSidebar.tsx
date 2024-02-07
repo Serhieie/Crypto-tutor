@@ -18,16 +18,13 @@ import {
   setIsTableOpen,
   getIsDeleteModalOpen,
   setIsDeleteModalOpen,
+  setCoin,
+  setIsModalOpen,
 } from "../../redux/dashboardSlice";
 import { refetchCrypto } from "../../helpers/utils/formLogic/refetchCrypto";
 import { DeleteModal } from "./DeleteModal/DeleteModal";
 
-interface AppSidebarProps {
-  setCoin: React.Dispatch<React.SetStateAction<Cryptocurrency | null>>;
-  setIsModalOpenl: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export const AppSidebar: React.FC<AppSidebarProps> = ({ setCoin, setIsModalOpenl }) => {
+export const AppSidebar: React.FC = () => {
   const dispatch = useDispatch();
   const isDeleteModalOpen = useSelector(getIsDeleteModalOpen);
   const { data, refetch } = useGetAllCryptoQuery();
@@ -92,8 +89,8 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ setCoin, setIsModalOpenl
       else if (isInput) return;
       //add toin to modal and open it
       else if (selectedCoin && !isButton) {
-        setIsModalOpenl(true);
-        setCoin(selectedCoin);
+        dispatch(setIsModalOpen(true));
+        dispatch(setCoin(selectedCoin));
       }
       //handle delete asset
       else if (isButton && cryptoId) {

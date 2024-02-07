@@ -89,8 +89,9 @@ export const PortfolioChartLine: React.FC<PortfolioChartLineProps> = ({ id }) =>
     }
   }, [data, isLoading, isError, id]);
 
-  if (isLoading) return <div className="mt-40">Loading...</div>;
-  if (isError) return <div className="mt-40">Error fetching data</div>;
+  if (isLoading) return <div className="mt-52 font-montserrat text-3xl">Loading...</div>;
+  if (isError)
+    return <div className="mt-40 font-montserrat text-3xl">Error fetching data</div>;
 
   return (
     <div className="mt-1 flex justify-center h-[500px]">
