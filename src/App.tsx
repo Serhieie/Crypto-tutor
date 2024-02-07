@@ -11,14 +11,11 @@ import { Routes, Route } from "react-router-dom";
 
 const Registration = lazy(() => import("./components/pages/registration/Registration"));
 const Login = lazy(() => import("./components/pages/login/Login"));
-const Crypto = lazy(() => import("./components/AppLayout/MainContent"));
+export const Crypto = lazy(() => import("./components/AppLayout/MainContent"));
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
-  const { isRefreshing, isLoggedIn } = useAuth();
-
-  console.log("refreshing", isRefreshing);
-  console.log("isLoggedIn", isLoggedIn);
+  const { isRefreshing } = useAuth();
 
   //fetch current user
   useEffect(() => {
@@ -56,7 +53,7 @@ const App: React.FC = () => {
             </PrivateRoute>
           }
         />
-        <Route path="*" element={<NoPage />} />
+        <Route path="/*" element={<NoPage />} />
       </Route>
     </Routes>
   );
