@@ -1,4 +1,4 @@
-import type { Cryptocurrency } from "../../redux/Cryptocurency.types";
+import type { Cryptocurrency } from "../../redux/crypto/Cryptocurency.types";
 
 export interface AppHeaderProps {
   setCoin: React.Dispatch<React.SetStateAction<Cryptocurrency | null>>;

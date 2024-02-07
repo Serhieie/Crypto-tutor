@@ -1,14 +1,11 @@
-import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import { getLogedIn, getisLoadingUser, getToken } from "../redux/auth/selectors-auth";
 import { RedirectProps } from "./Redirect.type";
+import { useAuth } from "../helpers/hooks/authSelector";
 
 const PrivateRoute: React.FC<RedirectProps> = ({ children, redirectTo = "/" }) => {
-  const token = useSelector(getToken);
-  const isLoggedIn = useSelector(getLogedIn);
-  const userLoading = useSelector(getisLoadingUser);
+  const { token, isLoggedIn, isRefreshing } = useAuth();
 
-  const shouldRedirect = !userLoading && !isLoggedIn && !token;
+  const shouldRedirect = !isRefreshing && !isLoggedIn && !token;
 
   return shouldRedirect ? <Navigate to={redirectTo} /> : <>{children}</>;
 };

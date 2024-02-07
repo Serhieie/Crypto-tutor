@@ -1,25 +1,20 @@
 import { Button } from "antd";
+import { useCryptoState } from "../../helpers/hooks/cryptoSelector";
 import { logout } from "../../redux/auth/operations-auth";
 import { HiLogout } from "react-icons/hi";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  setIsCoinsShowed,
-  getIsCoinsShowed,
-  setIsDrawerOpen,
-  getAssets,
-} from "../../redux/dashboardSlice";
+import { useDispatch } from "react-redux";
+import { setIsCoinsShowed, setIsDrawerOpen } from "../../redux/crypto/dashboardSlice";
 
 export const ButtonSet: React.FC = () => {
   const dispatch = useDispatch();
-  const assets = useSelector(getAssets);
-  const isCoinsShowed = useSelector(getIsCoinsShowed);
+  const { isCoinShowed, assets } = useCryptoState();
 
   const handleLogout = async () => {
     dispatch(logout() as any);
   };
 
   const handleShowCoins = () => {
-    if (!isCoinsShowed) dispatch(setIsCoinsShowed(true));
+    if (!isCoinShowed) dispatch(setIsCoinsShowed(true));
     else dispatch(setIsCoinsShowed(false));
   };
 
@@ -38,7 +33,7 @@ export const ButtonSet: React.FC = () => {
                font-medium font-montserrat h-9 "
             type="primary"
           >
-            {isCoinsShowed ? " Chart & Table " : " My Coins "}
+            {isCoinShowed ? " Chart & Table " : " My Coins "}
           </Button>
           <Button
             onClick={showDrawer}

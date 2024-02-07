@@ -1,4 +1,4 @@
-import { CommonAsset } from "../../redux/Cryptocurency.types";
+import { CommonAsset } from "../../redux/crypto/Cryptocurency.types";
 import { RiDeleteBackLine } from "react-icons/ri";
 import { CoinLabel } from "../CoinLabel";
 

@@ -1,13 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import { changeUserEmail } from "../../../redux/auth/slice-auth";
 import { getUserData } from "../../../redux/auth/selectors-auth";
-import { getShowPassword, setShowPassword } from "../../../redux/dashboardSlice";
+import { useCryptoState } from "../../../helpers/hooks/cryptoSelector";
+import { setShowPassword } from "../../../redux/crypto/dashboardSlice";
 import { PiEyeClosedBold } from "react-icons/pi";
 import { HiMiniEye } from "react-icons/hi2";
 import { LoginInputsProps } from "./Login.types";
 
 export const LoginInputs: React.FC<LoginInputsProps> = ({ windowSize }) => {
-  const showPassword = useSelector(getShowPassword);
+  const { showPassword } = useCryptoState();
   const dispatch = useDispatch();
   const user = useSelector(getUserData);
 

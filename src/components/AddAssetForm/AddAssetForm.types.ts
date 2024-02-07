@@ -1,4 +1,4 @@
-import type { CommonAsset } from "../../redux/Cryptocurency.types";
+import type { CommonAsset } from "../../redux/crypto/Cryptocurency.types";
 
 export interface AddAssetFormProps {
   onCloseResult: () => void;

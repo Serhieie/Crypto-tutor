@@ -1,5 +1,5 @@
 import { Statistic } from "antd";
-import { CommonAsset } from "../../redux/Cryptocurency.types";
+import { CommonAsset } from "../../redux/crypto/Cryptocurency.types";
 import { PiChartLineDownBold, PiChartLineUpBold } from "react-icons/pi";
 import { FaChartArea } from "react-icons/fa";
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
-import { useGetCryptoChartQuery } from "../../redux/cryptoApi";
+import { useGetCryptoChartQuery } from "../../redux/crypto/cryptoApi";
 import {
   Chart,
   CategoryScale,

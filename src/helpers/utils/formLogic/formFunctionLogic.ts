@@ -1,9 +1,9 @@
 import { calculateProfitPercentage } from "../../calculateProfitPercentage";
-import type { CommonAsset } from "../../../redux/Cryptocurency.types";
-import type { Cryptocurrency } from "../../../redux/Cryptocurency.types";
+import type { CommonAsset } from "../../../redux/crypto/Cryptocurency.types";
+import type { Cryptocurrency } from "../../../redux/crypto/Cryptocurency.types";
 import { isAssetMustBeChanged } from "./assetMustBeChanged";
-import { changeAssets } from "../../../redux/dashboardSlice";
-import type { GetAllCryptoResponse } from "../../../redux/cryptoApi";
+import { changeAssets } from "../../../redux/crypto/dashboardSlice";
+import type { GetAllCryptoResponse } from "../../../redux/crypto/cryptoApi";
 import { Dispatch } from "redux";
 
 export const mapAssets = (

@@ -3,35 +3,29 @@ import { CardList } from "./CardList";
 import { CardHeader } from "./CardHeader";
 import { useState, useMemo, useEffect } from "react";
 import { changeAssetAmount } from "../../helpers/utils/formLogic/changeAssetAmount";
-import type { Cryptocurrency } from "../../redux/Cryptocurency.types";
-import { useGetAllCryptoQuery } from "../../redux/cryptoApi";
-import { useSelector, useDispatch } from "react-redux";
+import type { Cryptocurrency } from "../../redux/crypto/Cryptocurency.types";
+import { useGetAllCryptoQuery } from "../../redux/crypto/cryptoApi";
+import { useCryptoState } from "../../helpers/hooks/cryptoSelector";
+import { useDispatch } from "react-redux";
 import {
-  getAssets,
-  getIsCoinsShowed,
-  getFilterValue,
   changeAssets,
   setAssetToShow,
   setIsCoinsShowed,
   setIsChartLineOpen,
   setIsChartPieOpen,
   setIsTableOpen,
-  getIsDeleteModalOpen,
   setIsDeleteModalOpen,
   setCoin,
   setIsModalOpen,
-} from "../../redux/dashboardSlice";
+} from "../../redux/crypto/dashboardSlice";
 import { refetchCrypto } from "../../helpers/utils/formLogic/refetchCrypto";
 import { DeleteModal } from "./DeleteModal/DeleteModal";
 
 export const AppSidebar: React.FC = () => {
   const dispatch = useDispatch();
-  const isDeleteModalOpen = useSelector(getIsDeleteModalOpen);
+  const { isDeleteModalOpen, isCoinShowed, assets, filterValue } = useCryptoState();
   const { data, refetch } = useGetAllCryptoQuery();
-  const isCoinShowed = useSelector(getIsCoinsShowed);
   const [coinForUpdate, setCoinForUpdate] = useState<Cryptocurrency>();
-  const assets = useSelector(getAssets);
-  const filter = useSelector(getFilterValue);
 
   //every 60 sec updating data and changing coin price
   useEffect(() => {
@@ -49,7 +43,7 @@ export const AppSidebar: React.FC = () => {
 
   //filter func
   const getVisibleContacts = useMemo(() => {
-    const normalizedFilter = filter.toLowerCase();
+    const normalizedFilter = filterValue.toLowerCase();
     if (!Array.isArray(assets)) {
       return [];
     }
@@ -59,7 +53,7 @@ export const AppSidebar: React.FC = () => {
         name?.toLowerCase().includes(normalizedFilter)
     );
     return filteredContacts;
-  }, [assets, filter]);
+  }, [assets, filterValue]);
 
   //Main Card logic with modals and global state
   const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

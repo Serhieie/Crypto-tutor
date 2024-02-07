@@ -4,11 +4,11 @@ export interface CryptoState {
   isLoading: boolean;
   isModalOpen: boolean;
   assets: CommonAsset[];
-  showCoins: boolean;
+  isCoinShowed: boolean;
   isDrawerOpen: boolean;
   filterValue: string;
   coinForUpdate: Cryptocurrency | null;
-  assetToShow: string | null;
+  assetToShowId: string | null;
   isChartLineOpen: boolean;
   isChartPieOpen: boolean;
   isTableOpen: boolean;
@@ -21,11 +21,11 @@ export const initialState: CryptoState = {
   isLoading: false,
   isModalOpen: false,
   assets: [],
-  showCoins: false,
+  isCoinShowed: false,
   isDrawerOpen: false,
   filterValue: "",
   coinForUpdate: null,
-  assetToShow: null,
+  assetToShowId: null,
   isChartLineOpen: false,
   isChartPieOpen: true,
   isTableOpen: false,

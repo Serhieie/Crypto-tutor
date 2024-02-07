@@ -1,4 +1,4 @@
-import { CommonAsset } from "../../redux/Cryptocurency.types";
+import { CommonAsset } from "../../redux/crypto/Cryptocurency.types";
 import { Typography, List, Tag } from "antd";
 
 interface CardListProps {

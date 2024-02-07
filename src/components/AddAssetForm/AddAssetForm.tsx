@@ -1,11 +1,11 @@
-import type { Cryptocurrency } from "../../redux/Cryptocurency.types";
+import type { Cryptocurrency } from "../../redux/crypto/Cryptocurency.types";
 import { PiHandCoinsLight } from "react-icons/pi";
 import { CoinLabel } from "../CoinLabel";
-import type { CommonAsset } from "../../redux/Cryptocurency.types";
+import type { CommonAsset } from "../../redux/crypto/Cryptocurency.types";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useRef, useEffect } from "react";
-import { useGetAllCryptoQuery } from "../../redux/cryptoApi";
-import { getAssets } from "../../redux/dashboardSlice";
+import { useGetAllCryptoQuery } from "../../redux/crypto/cryptoApi";
+import { getAssets } from "../../redux/crypto/dashboardSlice";
 import { isAssetInState } from "../../helpers/utils/formLogic/formFunctionLogic";
 import type { AddAssetFormProps, FieldType } from "./AddAssetForm.types";
 import { validateMessages } from "./validationMessages";

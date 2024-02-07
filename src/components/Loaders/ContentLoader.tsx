@@ -1,10 +1,9 @@
-import { useSelector } from "react-redux";
+import { useCryptoState } from "../../helpers/hooks/cryptoSelector";
 import { Spin } from "antd";
-import { getAssets, getIsCoinsShowed } from "../../redux/dashboardSlice";
 
 export const ContentLoader: React.FC = () => {
-  const assets = useSelector(getAssets);
-  const isCoinShowed = useSelector(getIsCoinsShowed);
+  const { assets, isCoinShowed } = useCryptoState();
+
   return (
     <div
       className={`

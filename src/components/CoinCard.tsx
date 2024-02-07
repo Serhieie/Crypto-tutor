@@ -1,6 +1,6 @@
 import { Typography, Tag, Statistic, List } from "antd";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import type { CommonAsset } from "../redux/Cryptocurency.types";
+import type { CommonAsset } from "../redux/crypto/Cryptocurency.types";
 
 interface CoininfoModalProps {
   coin: CommonAsset | null;

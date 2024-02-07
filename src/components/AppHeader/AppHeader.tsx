@@ -3,26 +3,23 @@ import { ButtonSet } from "./ButtonSet";
 import { Filter } from "../Fliter";
 import { CloseOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { AddAssetForm } from "../AddAssetForm/AddAssetForm";
-import { useGetAllCryptoQuery } from "../../redux/cryptoApi";
+import { useGetAllCryptoQuery } from "../../redux/crypto/cryptoApi";
+import { useCryptoState } from "../../helpers/hooks/cryptoSelector";
 
 import { CiBitcoin } from "react-icons/ci";
 import {
-  getAssets,
   setIsDrawerOpen,
-  getIsDrawerOpen,
   setCoin,
   setIsModalOpen,
-} from "../../redux/dashboardSlice";
+} from "../../redux/crypto/dashboardSlice";
 import { useDispatch } from "react-redux";
 
 export const AppHeader: React.FC = () => {
   const dispatch = useDispatch();
+  const { isDrawerOpen, assets } = useCryptoState();
   const [select, setSelect] = useState<boolean>(false);
-  const isDrawerOpen = useSelector(getIsDrawerOpen);
   const { data } = useGetAllCryptoQuery();
-  const assets = useSelector(getAssets);
 
   const onCloseDrawer = () => {
     dispatch(setIsDrawerOpen(false));

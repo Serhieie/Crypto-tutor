@@ -1,11 +1,11 @@
 import { useDispatch } from "react-redux";
-import { changeFilterValue, getFilterValue } from "../redux/dashboardSlice";
+import { changeFilterValue } from "../redux/crypto/dashboardSlice";
 import { BsFilterRight } from "react-icons/bs";
-import { useSelector } from "react-redux";
+import { useCryptoState } from "../helpers/hooks/cryptoSelector";
 
 export const Filter: React.FC = () => {
   const dispatch = useDispatch();
-  const filterValue = useSelector(getFilterValue);
+  const { filterValue } = useCryptoState();
 
   const onFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.currentTarget.value;

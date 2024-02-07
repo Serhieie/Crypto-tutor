@@ -1,19 +1,18 @@
 import { Typography, Divider, Tag } from "antd";
 import { CoinLabel } from "./CoinLabel";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { getAssets } from "../redux/dashboardSlice";
-import type { Cryptocurrency } from "../redux/Cryptocurency.types";
-import type { CommonAsset } from "../redux/Cryptocurency.types";
+import type { Cryptocurrency } from "../redux/crypto/Cryptocurency.types";
+import type { CommonAsset } from "../redux/crypto/Cryptocurency.types";
 import { CoinCard } from "./CoinCard";
+import { useCryptoState } from "../helpers/hooks/cryptoSelector";
 
 interface CoininfoModalProps {
   coin: Cryptocurrency | null;
 }
 
 export const CoinInfoModal: React.FC<CoininfoModalProps> = ({ coin }) => {
+  const { assets } = useCryptoState();
   const [assetCoin, setAssetCoin] = useState<CommonAsset | null>(null);
-  const assets = useSelector(getAssets);
 
   const findCoinById = (assets: CommonAsset[], coin: Cryptocurrency) => {
     const isCoinInWallet = assets.find((asset) => asset.id === coin.id);

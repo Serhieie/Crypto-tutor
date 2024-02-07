@@ -1,21 +1,16 @@
 import { Button } from "antd";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { PortfolioChart } from "../PortfolioChart/PortfolioChart";
 import { AssetsTable } from "../AssetsTable";
 import { PiCoinsLight } from "react-icons/pi";
-import { useGetAllCryptoQuery } from "../../redux/cryptoApi";
+import { useGetAllCryptoQuery } from "../../redux/crypto/cryptoApi";
+import { useCryptoState } from "../../helpers/hooks/cryptoSelector";
 import {
-  getAssets,
-  getIsCoinsShowed,
   setIsDrawerOpen,
-  getAssetToShow,
-  getIsChartLineOpen,
   setIsChartLineOpen,
-  getIsChartPieOpen,
   setIsChartPieOpen,
-  getIsTableOpen,
   setIsTableOpen,
-} from "../../redux/dashboardSlice";
+} from "../../redux/crypto/dashboardSlice";
 import { PortfolioChartLine } from "../PortfolioChart/PortfolioChartLine";
 import { ContentLoader } from "../Loaders/ContentLoader";
 
@@ -25,12 +20,14 @@ import { ContentLoader } from "../Loaders/ContentLoader";
 export const AppContent = () => {
   const dispatch = useDispatch();
   const { data, isLoading } = useGetAllCryptoQuery();
-  const isCoinShowed = useSelector(getIsCoinsShowed);
-  const assets = useSelector(getAssets);
-  const assetToShowId = useSelector(getAssetToShow);
-  const isChartLineOpen = useSelector(getIsChartLineOpen);
-  const isChartPieOpen = useSelector(getIsChartPieOpen);
-  const isTableOpen = useSelector(getIsTableOpen);
+  const {
+    isCoinShowed,
+    assetToShowId,
+    isChartLineOpen,
+    isChartPieOpen,
+    isTableOpen,
+    assets,
+  } = useCryptoState();
 
   const handleChangeChart = () => {
     if (isChartPieOpen) return;

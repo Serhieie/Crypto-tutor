@@ -23,7 +23,7 @@ export const dashboardSlice = createSlice({
       state.showPassword = !state.showPassword;
     },
     setIsCoinsShowed(state, action: PayloadAction<boolean>) {
-      state.showCoins = action.payload;
+      state.isCoinShowed = action.payload;
     },
     setIsDrawerOpen(state, action: PayloadAction<boolean>) {
       state.isDrawerOpen = action.payload;
@@ -50,7 +50,7 @@ export const dashboardSlice = createSlice({
       state.assets = state.assets.filter((asset) => asset.id !== action.payload);
     },
     setAssetToShow(state, action: PayloadAction<string | null>) {
-      state.assetToShow = action.payload;
+      state.assetToShowId = action.payload;
     },
     changeFilterValue(state, action: PayloadAction<string>) {
       state.filterValue = action.payload;
@@ -92,31 +92,5 @@ export const {
   setShowPassword,
   setCoin,
 } = dashboardSlice.actions;
-
-export const getIsLoading = (state: { dashboard: CryptoState }) =>
-  state.dashboard.isLoading;
-export const getIsModalOpen = (state: { dashboard: CryptoState }) =>
-  state.dashboard.isModalOpen;
-export const getIsDeleteModalOpen = (state: { dashboard: CryptoState }) =>
-  state.dashboard.isDeleteModalOpen;
-export const getIsCoinsShowed = (state: { dashboard: CryptoState }) =>
-  state.dashboard.showCoins;
-export const getIsDrawerOpen = (state: { dashboard: CryptoState }) =>
-  state.dashboard.isDrawerOpen;
-export const getFilterValue = (state: { dashboard: CryptoState }) =>
-  state.dashboard.filterValue;
-export const getCoinForUpdate = (state: { dashboard: CryptoState }) =>
-  state.dashboard.coinForUpdate;
-export const getAssetToShow = (state: { dashboard: CryptoState }) =>
-  state.dashboard.assetToShow;
-export const getIsChartLineOpen = (state: { dashboard: CryptoState }) =>
-  state.dashboard.isChartLineOpen;
-export const getIsChartPieOpen = (state: { dashboard: CryptoState }) =>
-  state.dashboard.isChartPieOpen;
-export const getIsTableOpen = (state: { dashboard: CryptoState }) =>
-  state.dashboard.isTableOpen;
-export const getShowPassword = (state: { dashboard: CryptoState }) =>
-  state.dashboard.showPassword;
-export const getCoin = (state: { dashboard: CryptoState }) => state.dashboard.coin;
 
 export default dashboardSlice.reducer;

@@ -1,16 +1,14 @@
 import { AppSidebar } from "../AppSidebar/AppSidebar";
 import { AppContent } from "../AppContent/AppContent";
 import { CoinInfoModal } from "../CoinInfoModal";
-import { getCoin, setIsModalOpen, getIsModalOpen } from "../../redux/dashboardSlice";
-
+import { setIsModalOpen } from "../../redux/crypto/dashboardSlice";
 import { Modal } from "antd";
-import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { useCryptoState } from "../../helpers/hooks/cryptoSelector";
 
 const MainContent: React.FC = () => {
+  const { coin, isModalOpen } = useCryptoState();
   const dispatch = useDispatch();
-  const isModalOpen = useSelector(getIsModalOpen);
-  const coin = useSelector(getCoin);
   const handleCancel = () => {
     dispatch(setIsModalOpen(false));
   };

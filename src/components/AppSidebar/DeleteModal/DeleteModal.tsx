@@ -1,7 +1,7 @@
 import { Modal, Button } from "antd";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Cryptocurrency } from "../AppSideBar.types";
-import { GetAllCryptoResponse } from "../../../redux/cryptoApi";
+import { GetAllCryptoResponse } from "../../../redux/crypto/cryptoApi";
 import {
   removeAsset,
   setAssetToShow,
@@ -9,8 +9,8 @@ import {
   setIsChartPieOpen,
   setIsTableOpen,
   setIsDeleteModalOpen,
-  getIsDeleteModalOpen,
-} from "../../../redux/dashboardSlice";
+} from "../../../redux/crypto/dashboardSlice";
+import { useCryptoState } from "../../../helpers/hooks/cryptoSelector";
 
 interface DeleteModalProps {
   data: GetAllCryptoResponse | undefined;
@@ -19,7 +19,7 @@ interface DeleteModalProps {
 
 export const DeleteModal: React.FC<DeleteModalProps> = ({ data, coinForUpdate }) => {
   const dispatch = useDispatch();
-  const isDeleteModalOpen = useSelector(getIsDeleteModalOpen);
+  const { isDeleteModalOpen } = useCryptoState();
 
   const handleCloseDeleteModal = () => {
     dispatch(setIsDeleteModalOpen());

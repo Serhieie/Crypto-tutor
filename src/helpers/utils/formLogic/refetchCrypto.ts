@@ -1,6 +1,6 @@
 import { calculateProfitPercentage } from "../../calculateProfitPercentage";
-import type { CommonAsset } from "../../../redux/Cryptocurency.types";
-import { GetAllCryptoResponse } from "../../../redux/cryptoApi";
+import type { CommonAsset } from "../../../redux/crypto/Cryptocurency.types";
+import { GetAllCryptoResponse } from "../../../redux/crypto/cryptoApi";
 
 export const refetchCrypto = (
   stateAssets: CommonAsset[] | undefined,

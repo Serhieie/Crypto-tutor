@@ -1,7 +1,7 @@
 import { calculateProfitPercentage } from "../../calculateProfitPercentage";
 import { issAssetInStateIfLogic } from "./ifStates";
-import type { CommonAsset } from "../../../redux/Cryptocurency.types";
-import type { Cryptocurrency } from "../../../redux/Cryptocurency.types";
+import type { CommonAsset } from "../../../redux/crypto/Cryptocurency.types";
+import type { Cryptocurrency } from "../../../redux/crypto/Cryptocurency.types";
 
 export const isAssetMustBeChanged = (
   stateAssets: CommonAsset[] | undefined,

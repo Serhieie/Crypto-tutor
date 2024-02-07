@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { cryptoApi } from "./cryptoApi";
+import { cryptoApi } from "./crypto/cryptoApi";
 import rootReducer from "./rootReducer";
 import {
   persistStore,

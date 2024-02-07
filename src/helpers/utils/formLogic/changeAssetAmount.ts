@@ -1,4 +1,7 @@
-import type { CommonAsset, Cryptocurrency } from "../../../redux/Cryptocurency.types";
+import type {
+  CommonAsset,
+  Cryptocurrency,
+} from "../../../redux/crypto/Cryptocurency.types";
 import { calculateProfitPercentage } from "../../calculateProfitPercentage";
 
 export const changeAssetAmount = (

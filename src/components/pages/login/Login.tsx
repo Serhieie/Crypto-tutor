@@ -1,16 +1,15 @@
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { LoginFormButton } from "./LoginFormButton";
 import { LoginInputs } from "./LoginInputs";
 import { login } from "../../../redux/auth/operations-auth";
-import { getisLoadingUser } from "../../../redux/auth/selectors-auth";
 import { useEffect, useState, FormEvent } from "react";
 import { CredentialsLogin } from "../../../redux/auth/redux-auth.type";
 import { useDispatch } from "react-redux";
+import { useCryptoState } from "../../../helpers/hooks/cryptoSelector";
 
 const Login: React.FC = () => {
   const dispatch = useDispatch();
-  const isLoading: boolean = useSelector(getisLoadingUser);
+  const { isLoading } = useCryptoState();
   const [windowSize, setWindowSize] = useState<{
     height: number;
     width: number;

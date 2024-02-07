@@ -1,14 +1,13 @@
-import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import { Suspense } from "react";
 import { Layout, Spin } from "antd";
 import { AppHeader } from "../AppHeader/AppHeader";
-import { getIsLoading } from "../../redux/dashboardSlice";
 import { useAuth } from "../../helpers/hooks/authSelector";
 import { AuthNav } from "./AuthNavigation";
+import { useCryptoState } from "../../helpers/hooks/cryptoSelector";
 
 const AppLayout: React.FC = () => {
-  const isLoading = useSelector(getIsLoading);
+  const { isLoading } = useCryptoState()
   const { token, isLoggedIn } = useAuth();
   if (isLoading) return <Spin size="large" fullscreen />;
   return (

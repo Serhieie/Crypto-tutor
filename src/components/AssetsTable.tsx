@@ -1,7 +1,6 @@
 import { Table } from "antd";
 import type { TableColumnsType } from "antd";
-import { getAssets } from "../redux/dashboardSlice";
-import { useSelector } from "react-redux";
+import { useCryptoState } from "../helpers/hooks/cryptoSelector";
 
 interface DataType {
   key: React.Key | undefined;
@@ -11,7 +10,7 @@ interface DataType {
 }
 
 export const AssetsTable = () => {
-  const assets = useSelector(getAssets);
+  const { assets } = useCryptoState();
 
   const columns: TableColumnsType<DataType> = [
     {

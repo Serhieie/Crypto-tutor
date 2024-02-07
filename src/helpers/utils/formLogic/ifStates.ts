@@ -1,5 +1,5 @@
-import type { CommonAsset } from "../../../redux/Cryptocurency.types";
-import type { Cryptocurrency } from "../../../redux/Cryptocurency.types";
+import type { CommonAsset } from "../../../redux/crypto/Cryptocurency.types";
+import type { Cryptocurrency } from "../../../redux/crypto/Cryptocurency.types";
 
 export const issAssetInStateIfLogic = (
   updatedAssets: CommonAsset[],

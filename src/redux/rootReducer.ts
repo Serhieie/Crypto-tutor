@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
-import { cryptoApi } from "./cryptoApi";
+import { cryptoApi } from "./crypto/cryptoApi";
 import { persistedAuthReducer } from "./auth/slice-auth";
-import { persistedDashboardReducer } from "./dashboardSlice";
+import { persistedDashboardReducer } from "./crypto/dashboardSlice";
 
 const rootReducer = combineReducers({
   dashboard: persistedDashboardReducer,
