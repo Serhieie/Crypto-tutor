@@ -9,9 +9,12 @@ export const navLinkStyles: string = ` md:text-sm ssm:text-xs md3:text-2xl
 export const AuthNav: React.FC = () => {
   const navStyles = ` text-darkFontDark  ${navLinkStyles} `;
   return (
-    <div className=" flex gap-8 w-full bg-[#0F172A] h-20 px-16 items-center ">
-      <p className="flex items-center gap-2 text-xl font-montserrat font-thin text-slate-600">
-        <SiBitcoincash size={26} /> CryptoApp for you
+    <div className=" flex gap-8 w-full bg-[#0F172A]  md:px-3 h-20 px-16 items-center ">
+      <p
+        className="flex items-center gap-2 md:text-xs text-xl 
+      font-montserrat font-thin text-slate-600"
+      >
+        <SiBitcoincash size={26} /> CryptoApp
       </p>
 
       <div className="flex gap-8 ml-auto">
