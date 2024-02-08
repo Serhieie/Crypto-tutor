@@ -62,7 +62,7 @@ export const AppHeader: React.FC = () => {
     <Layout.Header
       className={`
       ${
-        !assets.length ? " h-18  " : " md:h-40 md2:h-28 lg2:h-28 "
+        !assets.length ? " md:h-[105px]  md2:h-32" : " md:h-40 md2:h-28 lg2:h-28 "
       }  sm:gap-1 sm:px-1 md:py-2   md:gap-3 gap-0  flex md:flex-col 
       md3:flex-wrap  shadow-md  shadow-shadowBoxDark  `}
       style={{
