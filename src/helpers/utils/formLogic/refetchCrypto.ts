@@ -15,8 +15,8 @@ export const refetchCrypto = (
 
     if (matchingCrypto) {
       const growPercent = calculateProfitPercentage(
-        matchingCrypto.price,
-        asset.price / asset.amount
+        asset.price / asset.amount,
+        matchingCrypto.price
       );
       return {
         ...asset,

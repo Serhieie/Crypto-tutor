@@ -5,6 +5,7 @@ import { CloseOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { AddAssetForm } from "../AddAssetForm/AddAssetForm";
 import { useGetAllCryptoQuery } from "../../redux/crypto/cryptoApi";
+import { RxDividerVertical } from "react-icons/rx";
 import { useCryptoState } from "../../helpers/hooks/cryptoSelector";
 
 import { CiBitcoin } from "react-icons/ci";
@@ -58,6 +59,15 @@ export const AppHeader: React.FC = () => {
     })
     .reduce((acc, value) => acc + value, 0);
 
+  const portfolioProffit = assets
+    .map((asset) => {
+      if (data?.result.length) {
+        return Number(asset.price);
+      }
+      return 0;
+    })
+    .reduce((acc, value) => acc + value, 0);
+
   return (
     <Layout.Header
       className={`
@@ -74,12 +84,40 @@ export const AppHeader: React.FC = () => {
       }}
     >
       <div className="sm:mx-auto flex  gap-3 items-center ">
-        <div className="  bg-slate-800  rounded-lg p-2 px-6 mr-1">
+        <div
+          className="  bg-slate-800  
+        items-center rounded-lg p-1 px-3 md:px-2  mr-1  flex gap-1 py-2 md:py-1"
+        >
           <p
             className="font-montserrat 
-           font-bold  text-slate-300 text-xl md:text-xs  "
+           font-bold  text-blue-200 text-sm md:text-xs min-w-[110px]  flex items-center gap-1 "
           >
-            Portfolio Value : {portfolioValue.toFixed(2)}$
+            Value :{" "}
+            <span
+              className={`${
+                portfolioValue - portfolioProffit >= 0
+                  ? " text-green-400 "
+                  : " text-red-400 "
+              } text-lg md:text-xs`}
+            >
+              {portfolioValue.toFixed(2)}$
+            </span>
+          </p>
+          <RxDividerVertical size={26} className=" text-blue-500 " />
+          <p
+            className="font-montserrat 
+           font-bold  text-blue-200 min-w-[110px]  text-sm md:text-xs  flex items-center gap-1 "
+          >
+            Profit :{" "}
+            <span
+              className={`${
+                portfolioValue - portfolioProffit >= 0
+                  ? " text-green-400 "
+                  : " text-red-400 "
+              }  text-lg  md:text-xs`}
+            >
+              {(portfolioValue - portfolioProffit).toFixed(2)}$
+            </span>
           </p>
         </div>
 

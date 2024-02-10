@@ -34,7 +34,7 @@ export default {
         md2: { min: "768px", max: "1023px" },
         md3: { min: "768px" },
         mmd2: { min: "900px", max: "1265px" },
-        lg2: { min: "1024px", max: "1340px" },
+        lg2: { min: "1024px", max: "1360px" },
         xl2: { min: "1280px", max: "1535px" },
         "1xl2": { min: "1265px" },
         "2xl2": { min: "1536px" },
