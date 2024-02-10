@@ -3,10 +3,13 @@ import { useCryptoState } from "../../helpers/hooks/cryptoSelector";
 import { logout } from "../../redux/auth/operations-auth";
 import { HiLogout } from "react-icons/hi";
 import { useDispatch } from "react-redux";
+import { setIsCalculatorOpen } from "../../redux/calculator/calculatorSlice";
 import { setIsCoinsShowed, setIsDrawerOpen } from "../../redux/crypto/dashboardSlice";
+import { useCalculatorState } from "../../helpers/hooks/calculatorSelectors";
 
 export const ButtonSet: React.FC = () => {
   const dispatch = useDispatch();
+  const { isCalculatorOpen } = useCalculatorState();
   const { isCoinShowed, assets } = useCryptoState();
 
   const handleLogout = async () => {
@@ -20,6 +23,9 @@ export const ButtonSet: React.FC = () => {
 
   const showDrawer = () => {
     dispatch(setIsDrawerOpen(true));
+    if (isCalculatorOpen) {
+      dispatch(setIsCalculatorOpen());
+    }
   };
   return (
     <div className="ml-auto items-center  mr-2 flex md:flex-wrap md:mx-auto  1xl2:flex-row gap-3">
