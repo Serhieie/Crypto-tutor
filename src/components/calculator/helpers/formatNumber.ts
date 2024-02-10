@@ -2,7 +2,7 @@ export function formatNumber(compitation: number): string {
   const numStr: string = compitation.toString();
 
   if (numStr.includes(".")) {
-    const [integerPart, decimalPart]: string[] = numStr.split(".");
+    const [decimalPart]: string[] = numStr.split(".");
     if (decimalPart.length > 6) {
       return parseFloat(compitation.toFixed(6)).toString();
     } else {
