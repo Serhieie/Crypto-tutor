@@ -2,12 +2,14 @@ import { Layout, Select, Space, Drawer } from "antd";
 import { ButtonSet } from "./ButtonSet";
 import { Filter } from "../Fliter";
 import { CloseOutlined } from "@ant-design/icons";
+import { FaCalculator } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { AddAssetForm } from "../AddAssetForm/AddAssetForm";
 import { useGetAllCryptoQuery } from "../../redux/crypto/cryptoApi";
 import { RxDividerVertical } from "react-icons/rx";
 import { useCryptoState } from "../../helpers/hooks/cryptoSelector";
-
+import { useCalculatorState } from "../../helpers/hooks/calculatorSelectors";
+import { setIsCalculatorOpen } from "../../redux/calculator/calculatorSlice";
 import { CiBitcoin } from "react-icons/ci";
 import {
   setIsDrawerOpen,
@@ -15,9 +17,11 @@ import {
   setIsModalOpen,
 } from "../../redux/crypto/dashboardSlice";
 import { useDispatch } from "react-redux";
+import { Calculator } from "../calculator/components/App/Calculator";
 
 export const AppHeader: React.FC = () => {
   const dispatch = useDispatch();
+  const { isCalculatorOpen } = useCalculatorState();
   const { isDrawerOpen, assets } = useCryptoState();
   const [select, setSelect] = useState<boolean>(false);
   const { data } = useGetAllCryptoQuery();
@@ -67,6 +71,10 @@ export const AppHeader: React.FC = () => {
       return 0;
     })
     .reduce((acc, value) => acc + value, 0);
+
+  const toggleShowCalculator = () => {
+    dispatch(setIsCalculatorOpen());
+  };
 
   return (
     <Layout.Header
@@ -146,6 +154,16 @@ export const AppHeader: React.FC = () => {
           )}
         />
         <CiBitcoin className={"sm:hidden text-slate-400"} size={40} />
+        <button
+          id="calculator-btn"
+          className={`
+          ${isCalculatorOpen ? " text-blue-400 " : " text-slate-400 "}
+           transition-all `}
+          onClick={toggleShowCalculator}
+          type="button"
+        >
+          <FaCalculator size={30} />
+        </button>
       </div>
       <div className="flex gap-2 ml-auto md:flex-col-reverse md:mx-auto  ">
         {assets.length > 0 && (
@@ -158,7 +176,7 @@ export const AppHeader: React.FC = () => {
         )}
         <ButtonSet />
       </div>
-
+      <Calculator />
       <Drawer
         width={444}
         style={{ backgroundColor: "#334155" }}

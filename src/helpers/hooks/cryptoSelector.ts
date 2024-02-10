@@ -34,6 +34,7 @@ export const useCryptoState = (): CryptoState => {
   const isTableOpen: boolean = useSelector(getIsTableOpen);
   const showPassword: boolean = useSelector(getShowPassword);
   const coin: Cryptocurrency | null = useSelector(getCoin);
+
   return {
     assets,
     isLoading,

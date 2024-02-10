@@ -27,7 +27,7 @@ export const cryptoApi = createApi({
   keepUnusedDataFor: 30,
   endpoints: (builder) => ({
     getAllCrypto: builder.query<GetAllCryptoResponse, void>({
-      query: () => `coins?limit=150`,
+      query: () => `coins?limit=200`,
       providesTags: ["Crypto"],
       keepUnusedDataFor: 60,
     }),

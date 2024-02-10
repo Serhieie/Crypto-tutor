@@ -65,7 +65,8 @@ button,
   background-color: #e11d48;
 }
 
-#open-chart-btn {
+#open-chart-btn,
+#calculator-btn {
   background-color: transparent;
 }
 
