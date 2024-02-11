@@ -75,7 +75,7 @@ export const StyledButtons = styled.button`
   &.item.divide {
     grid-column: span 8;
     grid-row: span 8;
-    background-color: rgb(142, 123, 85);
+    background-color: rgb(196, 155, 73);
     color: rgba(0, 0, 0, 0.6);
   }
 
@@ -130,14 +130,14 @@ export const StyledButtons = styled.button`
   &.span-two.first-item {
     grid-column: span 8;
     grid-row: span 8;
-    background-color: rgb(129, 42, 42);
+    background-color: rgb(169, 42, 42);
     border-top-left-radius: 10px;
   }
 
   &.span-two.last-item {
     grid-column: span 16;
     grid-row: span 8;
-    background-color: rgb(31, 57, 101);
+    background-color: rgb(31, 57, 151);
     border-bottom-right-radius: 10px;
   }
 `;

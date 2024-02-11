@@ -25,34 +25,8 @@ export const AppWrapper = styled.div<AppWrapperProps>`
     gap: 1px;
 
     border-radius: 10px;
-    box-shadow: 12px 10px 40px rgba(10, 9, 7, 0.8);
+    box-shadow: 5px 0px 20px 4px rgba(0, 0, 0, 1);
     user-select: none;
-    z-index: 10000;
-  }
-
-  .glass-block-main {
-    position: absolute;
-    transform: rotate(50.5deg);
-    left: 0;
-    width: 200%;
-    height: 20%;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    z-index: 999;
-    flex-shrink: 0;
-  }
-
-  .glass-block-main2 {
-    position: absolute;
-    transform: rotate(139deg);
-    top: 0;
-    width: 95%;
-    height: 400%;
-    background-color: rgba(255, 255, 255, 0.022);
-    border-radius: 10px;
-    z-index: 1;
-    flex-shrink: 0;
-    pointer-events: none;
   }
 
   @media (min-width: 500px) {

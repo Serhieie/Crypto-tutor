@@ -40,7 +40,7 @@ export const DisplayWrapper = styled.div`
     transform: rotate(50deg);
     width: 100%;
     height: 40px;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(255, 255, 255, 0.07);
     border-radius: 10px;
     z-index: 1;
   }
@@ -59,7 +59,7 @@ export const DisplayWrapper = styled.div`
   }
   .glass-block3 {
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 40%;
     transform: translate(-50%, -50%);
     transform: rotate(50deg);
@@ -77,7 +77,7 @@ export const DisplayWrapper = styled.div`
   }
 
   .curr-operand {
-    color: rgb(255, 187, 60);
+    color: rgb(248, 172, 30);
     font-size: 1.9rem;
     padding: 0;
   }
@@ -86,7 +86,7 @@ export const DisplayWrapper = styled.div`
     height: 16px;
     margin: 0;
     padding: 0;
-    color: rgb(255, 187, 60);
+    color: rgb(248, 172, 30);
     font-size: 1.7rem;
   }
 `;
