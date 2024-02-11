@@ -20,7 +20,7 @@ export const Calculator: React.FC = () => {
         id="calculator"
         ref={calculatorRef}
         className={`
-        ${isCalculatorOpen ? "  pointer-events-auto " : "  pointer-events-none"}
+        ${isCalculatorOpen ? "  pointer-events-auto " : "  pointer-events-none "}
         calc-grid  transition-all z-[9999999]`}
       >
         <Display

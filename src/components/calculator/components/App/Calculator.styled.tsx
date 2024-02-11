@@ -10,7 +10,7 @@ export const AppWrapper = styled.div<AppWrapperProps>`
   transform: ${(props) =>
     props.isCalculatorOpen ? "translateX(-2%)" : "translateX(120%)"};
   transition: all 300ms linear;
-  position: absolute;
+  position: fixed;
   bottom: 3%;
   right: 1.6%;
 
@@ -25,7 +25,7 @@ export const AppWrapper = styled.div<AppWrapperProps>`
     gap: 1px;
 
     border-radius: 10px;
-    box-shadow: 5px 0px 20px 4px rgba(0, 0, 0, 1);
+    box-shadow: 4px 6px 14px 2px rgba(0, 0, 0, 0.7);
     user-select: none;
   }
 

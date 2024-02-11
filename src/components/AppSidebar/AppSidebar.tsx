@@ -110,10 +110,10 @@ export const AppSidebar: React.FC = () => {
       ${
         isCoinShowed
           ? " w-[100%] grid-cols-1 ssm2:grid-cols-1 md:grid-cols-2 md3:grid-cols-3 1xl2:grid-cols-4 gap-2  gap-y-2 p-2  auto-rows-min "
-          : " w-[22%] grid-cols-1 gap-2 lg:hidden auto-rows-max rounded-2xl overflow-hidden pr-1 "
+          : " w-[22%] grid-cols-1 gap-1 lg:hidden auto-rows-max rounded-2xl overflow-hidden pr-1"
       }
           overflow-y-scroll   h-[calc(100vh-86px)]
-        bg-[#0F172A]  grid   `}
+        bg-[#0F172A]  grid   p-2   `}
     >
       {getVisibleContacts.map((asset) => (
         <div
