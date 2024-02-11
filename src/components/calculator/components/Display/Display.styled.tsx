@@ -4,11 +4,11 @@ export const DisplayWrapper = styled.div`
     grid-column: 1 / -1;
     grid-row: span 1;
     background-color: rgba(255, 255, 255, 0.15);
-
-    padding: 0.1rem;
+    padding: 0.5rem;
     margin-bottom: 4px;
-
+    line-height: 0.5;
     font-family: "Iceland", sans-serif;
+    
 
     border: 1px solid rgba(0, 0, 0, 0.4);
     border-radius: 10px;
