@@ -1,4 +1,5 @@
 import { AuthState } from "./redux-auth.type";
+import { succesChangePasswordEmail, succesChangePassword } from "../../helpers/notiflix";
 
 const handlePending = (state: AuthState): AuthState => {
   return { ...state, isLoadingUser: true };
@@ -21,7 +22,7 @@ const handleRegisterFulfilled = (
       },
       token: action.payload.token,
       isLoadingUser: false,
-      isLoggedIn: true,
+      isLoggedIn: false,
     };
   }
   return state;
@@ -52,6 +53,7 @@ const handleLoginFulfilled = (state: AuthState, action: { payload: any }): AuthS
       token: action.payload.token,
       isLoggedIn: true,
       isLoadingUser: false,
+      changingPass: false,
     };
   }
   return state;
@@ -86,6 +88,20 @@ const handleFetchCurrentUserFulfilled = (
   return state;
 };
 
+const handleResentEmailVerifyFulfilled = (state: AuthState): AuthState => {
+  succesChangePasswordEmail();
+  return { ...state, isLoadingUser: false };
+};
+
+const handleChangePasswordRequestFulfilled = (state: AuthState): AuthState => {
+  succesChangePasswordEmail();
+  return { ...state, isLoadingUser: false, changingPass: true };
+};
+
+const handleChangePasswordFulfilled = (state: AuthState): AuthState => {
+  succesChangePassword();
+  return { ...state, isLoadingUser: false, changingPass: false };
+};
 export {
   handlePending,
   handleRegisterFulfilled,
@@ -94,4 +110,7 @@ export {
   handleLogoutFulfilled,
   handleFetchCurrentUserFulfilled,
   handleRejected,
+  handleResentEmailVerifyFulfilled,
+  handleChangePasswordRequestFulfilled,
+  handleChangePasswordFulfilled,
 };

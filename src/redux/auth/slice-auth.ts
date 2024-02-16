@@ -1,7 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import { register, login, logout, fetchCurrentUser } from "./operations-auth";
+import {
+  register,
+  login,
+  logout,
+  fetchCurrentUser,
+  resentEmailVerify,
+  changePasswordRequest,
+  changePassword,
+} from "./operations-auth";
 import {
   handlePending,
   handleRegisterFulfilled,
@@ -10,6 +18,9 @@ import {
   handleLogoutFulfilled,
   handleFetchCurrentUserFulfilled,
   handleRejected,
+  handleResentEmailVerifyFulfilled,
+  handleChangePasswordRequestFulfilled,
+  handleChangePasswordFulfilled,
 } from "./hendlers-auth";
 import { initialStateAuth } from "./initialStateAuth";
 import { AuthState } from "./redux-auth.type.ts";
@@ -36,6 +47,15 @@ const authSlice = createSlice({
     changeUserAvatar(state: AuthState, action: PayloadAction<string>) {
       state.avatar = action.payload;
     },
+    setIsVerifyModalOpen(state: AuthState, action: PayloadAction<boolean>) {
+      state.isVerifyModalOpen = action.payload;
+    },
+    setChangingPass(state: AuthState, action: PayloadAction<boolean>) {
+      state.changingPass = action.payload;
+    },
+    setResended(state: AuthState, action: PayloadAction<boolean>) {
+      state.resended = action.payload;
+    },
   },
   extraReducers(builder) {
     builder
@@ -54,13 +74,25 @@ const authSlice = createSlice({
       .addCase(fetchCurrentUser.pending, handlePending)
       .addCase(fetchCurrentUser.fulfilled, handleFetchCurrentUserFulfilled)
       .addCase(fetchCurrentUser.rejected, handleRejected);
+    builder
+      .addCase(resentEmailVerify.pending, handlePending)
+      .addCase(resentEmailVerify.fulfilled, handleResentEmailVerifyFulfilled)
+      .addCase(resentEmailVerify.rejected, handleRejected);
+    builder
+      .addCase(changePasswordRequest.pending, handlePending)
+      .addCase(changePasswordRequest.fulfilled, handleChangePasswordRequestFulfilled)
+      .addCase(changePasswordRequest.rejected, handleRejected);
+    builder
+      .addCase(changePassword.pending, handlePending)
+      .addCase(changePassword.fulfilled, handleChangePasswordFulfilled)
+      .addCase(changePassword.rejected, handleRejected);
   },
 });
 
 const authPersistConfig = {
   key: "auth",
   storage,
-  whitelist: ["token", "avatar", "user"],
+  whitelist: ["token", "avatar", "user", "changingPass"],
 };
 
 export const persistedAuthReducer = persistReducer<AuthState>(
@@ -75,4 +107,7 @@ export const {
   changeUserToken,
   changeUserAvatar,
   changeIsLoadingToken,
+  setIsVerifyModalOpen,
+  setChangingPass,
+  setResended,
 } = authSlice.actions;

@@ -1,6 +1,7 @@
 import { Dispatch } from "redux";
 import { register } from "../redux/auth/operations-auth";
-import { changeIsLoadingToken } from "../redux/auth/slice-auth";
+import { failedRegistrationValidation } from "./notiflix";
+import { changeIsLoadingToken, setIsVerifyModalOpen } from "../redux/auth/slice-auth";
 
 interface UserData {
   name: string;
@@ -66,7 +67,9 @@ export const handleRegistration = (
   if (Object.keys(errors).length === 0) {
     const credentials: Credentials = convertToCredentials(userData);
     dispatch(register(credentials));
+    dispatch(setIsVerifyModalOpen(true));
   } else {
+    failedRegistrationValidation();
     dispatch(changeIsLoadingToken(false));
     return errors;
   }

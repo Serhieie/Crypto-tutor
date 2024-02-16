@@ -7,6 +7,7 @@ import { InputProps } from "../Registration.types";
 export const PasswordAndConfirm: React.FC<InputProps> = ({
   withInputClass,
   fieldsStyle,
+  labelText,
 }) => {
   const [showPassword1, setShowPassword1] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
@@ -31,7 +32,7 @@ export const PasswordAndConfirm: React.FC<InputProps> = ({
       {" "}
       <label className={labelStyles} htmlFor="user-phone">
         {" "}
-        Password{" "}
+        {labelText}{" "}
       </label>
       <div className="flex">
         <Field
@@ -60,7 +61,7 @@ export const PasswordAndConfirm: React.FC<InputProps> = ({
         />
       </div>
       <label className={labelStyles} htmlFor="user-confirm-password">
-        Confirm Password
+        Confirm {labelText}
       </label>
       <div className="flex">
         <Field

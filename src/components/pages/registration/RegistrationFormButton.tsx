@@ -4,14 +4,31 @@ import { registrationSubmitBtnStyles } from "./Registration.styles";
 
 export const RegistrationFormButton: React.FC<RegistrationFormButtonProps> = ({
   isLoading,
+  onClick,
+  text,
+  timeRemaining,
+  resended,
 }) => {
   const btnStyles: string = `shadow-none hover:bg-buttonHoverColorDark 
   text-buttonTextColorDark rounded-md 
   bg-buttonColorDark  ${registrationSubmitBtnStyles}`;
 
   return (
-    <button id="reg-btn" type="submit" disabled={isLoading} className={btnStyles}>
-      {isLoading ? <PulseLoader color={`#3f78cc `} size="6px" /> : <>Registration</>}
+    <button
+      id="reg-btn"
+      type="submit"
+      disabled={isLoading}
+      onClick={onClick}
+      className={btnStyles}
+    >
+      {isLoading ? (
+        <PulseLoader color={`#3f78cc `} size="6px" />
+      ) : (
+        <>
+          {" "}
+          <>{resended ? `${timeRemaining} sec` : text}</>
+        </>
+      )}
     </button>
   );
 };

@@ -1,15 +1,21 @@
 import { Link } from "react-router-dom";
+import { setIsVerifyModalOpen, setResended } from "../../../redux/auth/slice-auth";
 import { LoginFormButton } from "./LoginFormButton";
 import { LoginInputs } from "./LoginInputs";
-import { login } from "../../../redux/auth/operations-auth";
+import { ForgotPasswordPage } from "./ForgotPasswordPage";
+import { login, resentEmailVerify } from "../../../redux/auth/operations-auth";
 import { useEffect, useState, FormEvent } from "react";
 import { CredentialsLogin } from "../../../redux/auth/redux-auth.type";
 import { useDispatch } from "react-redux";
+import { useAuth } from "../../../helpers/hooks/authSelector";
 import { useCryptoState } from "../../../helpers/hooks/cryptoSelector";
+import { Modal } from "antd";
 
 const Login: React.FC = () => {
   const dispatch = useDispatch();
   const { isLoading } = useCryptoState();
+  const { isVerifyModalOpen, isRefreshing, user, resended } = useAuth();
+  const [timeRemaining, setTimeRemaining] = useState(30);
   const [windowSize, setWindowSize] = useState<{
     height: number;
     width: number;
@@ -17,6 +23,26 @@ const Login: React.FC = () => {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+
+  const handleResentEmail = () => {
+    dispatch(setResended(true));
+    dispatch(resentEmailVerify({ email: user.email }) as any);
+    const intervalId = setInterval(() => {
+      setTimeRemaining((prevTime) => {
+        if (prevTime === 0) {
+          clearInterval(intervalId);
+          dispatch(setResended(false));
+          return 30;
+        } else {
+          return prevTime - 1;
+        }
+      });
+    }, 1000);
+  };
+
+  const closeVerifyModal = () => {
+    dispatch(setIsVerifyModalOpen(false));
+  };
 
   const handleResize = (): void => {
     setWindowSize({
@@ -57,6 +83,31 @@ const Login: React.FC = () => {
 
   return (
     <>
+      <Modal open={isVerifyModalOpen} onCancel={closeVerifyModal} footer={null}>
+        <h1 className=" text-3xl text-center mb-8 text-slate-700">
+          Email is not verified
+        </h1>
+        <p className="text-lg text-center text-slate-500">
+          Before start you should verify email
+        </p>
+        <p className="mt-3 text-lg text-center text-blue-900  font-semibold">
+          {user.email}
+        </p>
+        <div className="flex mt-12">
+          <LoginFormButton
+            text="Accept"
+            isLoading={isRefreshing}
+            onClick={closeVerifyModal}
+          />
+          <LoginFormButton
+            text="Resent Email"
+            isLoading={isRefreshing}
+            onClick={handleResentEmail}
+            resended={resended}
+            timeRemaining={timeRemaining}
+          />
+        </div>
+      </Modal>
       <form
         onSubmit={handleSubmit}
         autoComplete="off"
@@ -73,13 +124,15 @@ const Login: React.FC = () => {
           Login
         </h1>
         <LoginInputs windowSize={windowSize} />
+        <ForgotPasswordPage />
         <Link
-          className={`text-blue-400 font-medium  mt-12 flex gap-4 font-montserrat `}
+          className={`text-blue-400 font-medium  mt-4 mb-28 flex gap-4 font-montserrat `}
           to={"/registration"}
         >
           <p className={`text-slate-300 font-medium font-montserrat`}>Have no account?</p>
           Registrate now
         </Link>
+
         <LoginFormButton text="Sign in" isLoading={isLoading} />
       </form>
     </>

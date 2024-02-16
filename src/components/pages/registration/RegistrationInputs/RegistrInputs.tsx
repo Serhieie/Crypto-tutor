@@ -16,7 +16,11 @@ export const RegLogInputs: React.FC<RegLogInputsProps> = ({ windowSize }) => {
         withInputClass={withInputClass}
         fieldsStyle={fieldsStyle}
       />
-      <PasswordAndConfirm withInputClass={withInputClass} fieldsStyle={fieldsStyle} />
+      <PasswordAndConfirm
+        withInputClass={withInputClass}
+        fieldsStyle={fieldsStyle}
+        labelText="Password"
+      />
     </>
   );
 };

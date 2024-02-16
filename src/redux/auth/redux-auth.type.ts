@@ -10,16 +10,30 @@ export interface AuthState {
   isLoadingUser: boolean;
   avatar: string;
   error: boolean;
+  isVerifyModalOpen: boolean;
+  changingPass: boolean;
+  resended: boolean;
 }
 
 //operations-auth
 export interface AuthStateForOptions {
   auth: AuthState;
 }
+type UserData = {
+  email: string;
+  subscription: string;
+};
 
-export interface TokenData {
+export type TokenData = {
+  user?: UserData;
+  token?: string;
+  message?: string;
+};
+
+export type TokenDataReject = {
+  message: string;
   token: string;
-}
+};
 
 export interface Credentials {
   username: string;
@@ -35,4 +49,8 @@ export interface CredentialsRegistration {
   name: string;
   email: string;
   password: string;
+}
+
+export interface CredentialsResentVerify {
+  email: string;
 }

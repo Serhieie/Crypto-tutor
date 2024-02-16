@@ -2,6 +2,7 @@ export interface InputProps {
   widthClass?: string;
   withInputClass: string;
   fieldsStyle: string;
+  labelText?: string;
 }
 
 export interface RegLogInputsProps {
@@ -17,4 +18,8 @@ export interface initialValuesTypes {
 
 export interface RegistrationFormButtonProps {
   isLoading: boolean;
+  onClick?: () => void;
+  text: string;
+  resended?: boolean;
+  timeRemaining?: number;
 }

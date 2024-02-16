@@ -7,4 +7,7 @@ export const initialStateAuth: AuthState = {
   isLoadingUser: false,
   avatar: "",
   error: false,
+  isVerifyModalOpen: false,
+  changingPass: false,
+  resended: false,
 };

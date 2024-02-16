@@ -9,3 +9,7 @@ export const getAvatar = (state: RootState): string => state.auth.avatar;
 export const getLogedIn = (state: RootState): boolean => state.auth.isLoggedIn;
 export const getUserData = (state: RootState): { name: string; email: string } =>
   state.auth.user;
+export const getIsVerifyModalOpen = (state: RootState): boolean =>
+  state.auth.isVerifyModalOpen;
+export const getChangingPass = (state: RootState): boolean => state.auth.changingPass;
+export const getResended = (state: RootState): boolean => state.auth.resended;

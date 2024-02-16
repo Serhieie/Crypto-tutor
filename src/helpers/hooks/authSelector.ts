@@ -8,6 +8,9 @@ import {
   getLogedIn,
   getUserData,
   getAvatar,
+  getIsVerifyModalOpen,
+  getChangingPass,
+  getResended,
 } from "../../redux/auth/selectors-auth";
 
 export interface useAuthReturn {
@@ -18,6 +21,9 @@ export interface useAuthReturn {
   token: string | null;
   avatar: string;
   fullAuth: AuthState;
+  isVerifyModalOpen: boolean;
+  changingPass: boolean;
+  resended: boolean;
 }
 
 export const useAuth = (): useAuthReturn => {
@@ -28,6 +34,9 @@ export const useAuth = (): useAuthReturn => {
   const token: string | null = useSelector(getToken);
   const avatar: string = useSelector(getAvatar);
   const fullAuth: AuthState = useSelector(getUserAuth);
+  const isVerifyModalOpen: boolean = useSelector(getIsVerifyModalOpen);
+  const changingPass: boolean = useSelector(getChangingPass);
+  const resended: boolean = useSelector(getResended);
 
   return {
     isLoggedIn,
@@ -37,5 +46,8 @@ export const useAuth = (): useAuthReturn => {
     token,
     error,
     avatar,
+    isVerifyModalOpen,
+    changingPass,
+    resended,
   };
 };

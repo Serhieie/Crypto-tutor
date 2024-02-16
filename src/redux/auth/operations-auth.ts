@@ -1,5 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { setIsVerifyModalOpen } from "./slice-auth";
+import { Dispatch } from "redux";
 import {
   TokenData,
   AuthStateForOptions,
@@ -10,9 +12,12 @@ import {
   succesRegistrationMessage,
   failedRegistrationMessage,
   failedLogin,
+  failedLoginVerification,
+  failedChangePasswordEmail,
+  failedChangePassword,
 } from "../../helpers/notiflix";
 
-axios.defaults.baseURL = "https://connections-api.herokuapp.com/";
+axios.defaults.baseURL = "https://crypto-helper.onrender.com/api/";
 
 export const token = {
   set(token: string) {
@@ -29,19 +34,23 @@ interface UserData {
   // Інші поля про користувача
 }
 
+export interface email {
+  email: string;
+}
+
 export const register = createAsyncThunk<
   any,
   CredentialsRegistration,
   {
     rejectValue: string;
+    dispatch: Dispatch;
   }
 >("auth/register", async (credentials, thunkApi) => {
   try {
     const { data }: AxiosResponse<TokenData> = await axios.post(
-      "users/signup",
+      "auth/register",
       credentials
     );
-    token.set(data.token);
     succesRegistrationMessage();
     return data;
   } catch (error) {
@@ -51,22 +60,30 @@ export const register = createAsyncThunk<
 });
 
 export const login = createAsyncThunk<
-  any,
+  TokenData,
   CredentialsLogin,
   {
     rejectValue: string;
+    dispatch: Dispatch;
   }
->("users/login", async (credentials: CredentialsLogin, { rejectWithValue }) => {
+>("users/login", async (credentials: CredentialsLogin, { rejectWithValue, dispatch }) => {
   try {
     const { data }: AxiosResponse<TokenData> = await axios.post(
-      "users/login",
+      "auth/login",
       credentials
     );
-    token.set(data.token);
-    console.log(111);
+
+    if (data.token) token.set(data?.token);
+
     return data;
-  } catch (error) {
-    failedLogin();
+  } catch (error: any) {
+    if (error.response.data.message === "Email is not verifyed") {
+      dispatch(setIsVerifyModalOpen(true));
+      failedLoginVerification();
+    } else {
+      failedLogin();
+    }
+
     return rejectWithValue("Not correct user");
   }
 });
@@ -75,7 +92,7 @@ export const logout = createAsyncThunk<void, void, { rejectValue: string }>(
   "users/logout",
   async (_, thunkApi) => {
     try {
-      const { data }: AxiosResponse<void> = await axios.post("users/logout");
+      const { data }: AxiosResponse<void> = await axios.post("auth/logout");
       token.unset();
       return data;
     } catch (error) {
@@ -94,10 +111,48 @@ export const fetchCurrentUser = createAsyncThunk<UserData, void, { rejectValue: 
     }
     token.set(persistedToken);
     try {
-      const { data }: AxiosResponse<UserData> = await axios.get("users/current");
+      const { data }: AxiosResponse<UserData> = await axios.get("auth/current");
       return data;
     } catch (error) {
       return thunkApi.rejectWithValue("error");
     }
   }
 );
+
+export const resentEmailVerify = createAsyncThunk<
+  void,
+  { email: string },
+  { rejectValue: string }
+>("auth/resent", async (credentials: { email: string }, thunkApi) => {
+  try {
+    await axios.post("auth/verify", credentials);
+  } catch (error) {
+    return thunkApi.rejectWithValue("error");
+  }
+});
+
+export const changePasswordRequest = createAsyncThunk<
+  void,
+  { email: string },
+  { rejectValue: string }
+>("auth/changeRequest", async (credentials: { email: string }, thunkApi) => {
+  try {
+    await axios.post("auth/verify/changePassword", credentials);
+  } catch (error) {
+    failedChangePasswordEmail();
+    return thunkApi.rejectWithValue("error");
+  }
+});
+
+export const changePassword = createAsyncThunk<
+  void,
+  { password: string },
+  { rejectValue: string }
+>("auth/changePassword", async (credentials: { password: string }, thunkApi) => {
+  try {
+    await axios.post("auth/verify/changePassword/:changePasswordCode", credentials);
+  } catch (error) {
+    failedChangePassword();
+    return thunkApi.rejectWithValue("error");
+  }
+});
