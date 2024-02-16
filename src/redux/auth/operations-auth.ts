@@ -143,16 +143,20 @@ export const changePasswordRequest = createAsyncThunk<
     return thunkApi.rejectWithValue("error");
   }
 });
-
 export const changePassword = createAsyncThunk<
   void,
-  { password: string },
+  { password: string; changePasswordCode: string }, // Додайте changePasswordCode до типів аргументів
   { rejectValue: string }
->("auth/changePassword", async (credentials: { password: string }, thunkApi) => {
-  try {
-    await axios.post("auth/verify/changePassword/:changePasswordCode", credentials);
-  } catch (error) {
-    failedChangePassword();
-    return thunkApi.rejectWithValue("error");
+>(
+  "auth/changePassword",
+  async (credentials: { password: string; changePasswordCode: string }, thunkApi) => {
+    try {
+      await axios.post(`auth/verify/changePassword/${credentials.changePasswordCode}`, {
+        password: credentials.password,
+      });
+    } catch (error) {
+      failedChangePassword();
+      return thunkApi.rejectWithValue("error");
+    }
   }
-});
+);

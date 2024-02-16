@@ -6,6 +6,7 @@ import { changePassword } from "../../../redux/auth/operations-auth";
 import { registrationFormStyles } from "../registration/Registration.styles";
 import { inputsStyles } from "../registration/Registration.styles";
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { useAuth } from "../../../helpers/hooks/authSelector";
 import { initialValuesTypes } from "../registration/Registration.types";
 import { LoginFormButton } from "../login/LoginFormButton";
@@ -19,6 +20,7 @@ const initialValues: initialValuesTypes = {
 
 export const ChangePasswordPage: React.FC = () => {
   const dispatch = useDispatch();
+  const { changePasswordCode } = useParams<{ changePasswordCode: string }>();
   const [windowSize, setWindowSize] = useState<{
     width: number;
     height: number;
@@ -50,12 +52,15 @@ export const ChangePasswordPage: React.FC = () => {
   }, []);
 
   const handleSubmit = async (
-    values: { name: string; email: string; password: string },
+    values: { password: string },
     { resetForm }: { resetForm: () => void }
   ) => {
+    console.log(changePasswordCode);
     const { password } = values;
+    if (!changePasswordCode) return;
     const newPassword = {
       password: password.trim(),
+      changePasswordCode,
     };
     dispatch(changePassword(newPassword) as any);
     resetForm();

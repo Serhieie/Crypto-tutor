@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { NoPage } from "./NoPage";
 import React, { useEffect, lazy } from "react";
 import PrivateRoute from "./Redirect/PrivateRoute";
+import ToLoginRoute from "./Redirect/ToLoginRoute";
 import RestrictedRoute from "./Redirect/RestrictedRoute";
 import { Routes, Route } from "react-router-dom";
 import { ChangePasswordPage } from "./components/pages/changePassword/ChangePasswordPage";
@@ -38,7 +39,11 @@ const App: React.FC = () => {
         <Route path="/registration" element={<Registration />} />
         <Route
           path="/changePassword/:changePasswordCode"
-          element={<ChangePasswordPage />}
+          element={
+            <ToLoginRoute redirectTo="/">
+              <ChangePasswordPage />
+            </ToLoginRoute>
+          }
         />
         <Route
           path="/crypto"
