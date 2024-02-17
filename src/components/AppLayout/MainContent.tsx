@@ -12,6 +12,7 @@ const MainContent: React.FC = () => {
   const handleCancel = () => {
     dispatch(setIsModalOpen(false));
   };
+
   return (
     <>
       {" "}

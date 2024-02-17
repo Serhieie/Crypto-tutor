@@ -38,8 +38,9 @@ export const AppSidebar: React.FC = () => {
     updateAsset({ dataId, asset });
   };
 
-  //every 60 sec updating data and changing coin price
+  //every 40 sec updating data and changing coins price
   useEffect(() => {
+    if (!data) return;
     const intervalId = setInterval(async () => {
       try {
         await refetch();

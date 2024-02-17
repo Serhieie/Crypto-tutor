@@ -5,13 +5,11 @@ import { AppHeader } from "../AppHeader/AppHeader";
 import { useAuth } from "../../helpers/hooks/authSelector";
 import { AuthNav } from "./AuthNavigation";
 import { useCryptoState } from "../../helpers/hooks/cryptoSelector";
-import { useGetAllAssetsQuery } from "../../redux/crypto/assetsApi";
 
 const AppLayout: React.FC = () => {
   const { isLoading } = useCryptoState();
-  const { isLoading: loadAssets } = useGetAllAssetsQuery();
   const { token, isLoggedIn } = useAuth();
-  if (isLoading || loadAssets) return <Spin size="large" fullscreen />;
+  if (isLoading) return <Spin size="large" fullscreen />;
   return (
     <Layout style={{ overflow: "hidden" }}>
       {token && isLoggedIn ? <AppHeader /> : <AuthNav />}

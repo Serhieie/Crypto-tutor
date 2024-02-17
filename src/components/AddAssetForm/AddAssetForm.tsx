@@ -1,4 +1,5 @@
 import type { Cryptocurrency } from "../../redux/crypto/Cryptocurency.types";
+import { createDate } from "../../helpers/utils/createDate";
 import { PiHandCoinsLight } from "react-icons/pi";
 import { CoinLabel } from "../CoinLabel";
 import type { CommonAsset } from "../../redux/crypto/Cryptocurency.types";
@@ -53,7 +54,7 @@ export const AddAssetForm: React.FC<AddAssetFormProps> = ({ onCloseResult }) => 
       assetId: coin?.id,
       amount: values.amount,
       price: values.price || 0,
-      date: values.date ? values.date : new Date().getTime(),
+      date: values.date ? String(values.date) : createDate(Date.now()),
     };
     assetRef.current = newAsset;
     isAssetInState(dataAssets, newAsset, coin, addAssetToDb, updateAssetAtDb, data);

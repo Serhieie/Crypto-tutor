@@ -8,7 +8,7 @@ export interface CommonAsset {
   assetId?: string;
   amount: number;
   price: number;
-  date?: number;
+  date?: string;
   growPercent?: number;
   totalAmount?: number;
   totalProfit?: number;

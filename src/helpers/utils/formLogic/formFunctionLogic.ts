@@ -17,6 +17,7 @@ export const mapAssets = (
         const growPercent = calculateProfitPercentage(asset.price ?? 0, coin.price ?? 0);
         const obj: CommonAsset = {
           ...asset,
+          date: String(asset.date),
           icon: coin.icon,
           symbol: coin.symbol,
           grow:

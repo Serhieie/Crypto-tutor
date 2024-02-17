@@ -6,7 +6,7 @@ export interface AddAssetFormProps {
 export type FieldType = {
   amount: number;
   price?: number;
-  date?: number;
+  date?: string;
   total?: string;
 };
 
