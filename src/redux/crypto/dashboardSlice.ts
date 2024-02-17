@@ -16,8 +16,8 @@ export const dashboardSlice = createSlice({
     setIsModalOpen(state, action: PayloadAction<boolean>) {
       state.isModalOpen = action.payload;
     },
-    setIsDeleteModalOpen(state) {
-      state.isDeleteModalOpen = !state.isDeleteModalOpen;
+    setIsDeleteModalOpen(state, action: PayloadAction<boolean>) {
+      state.isDeleteModalOpen = action.payload;
     },
     setShowPassword(state) {
       state.showPassword = !state.showPassword;
@@ -47,7 +47,7 @@ export const dashboardSlice = createSlice({
       state.assets = [...action.payload];
     },
     removeAsset(state, action: PayloadAction<string>) {
-      state.assets = state.assets.filter((asset) => asset.id !== action.payload);
+      state.assets = state.assets.filter((asset) => asset.assetId !== action.payload);
     },
     setAssetToShow(state, action: PayloadAction<string | null>) {
       state.assetToShowId = action.payload;

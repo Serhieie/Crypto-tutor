@@ -4,7 +4,8 @@ export interface Explorer {
 }
 
 export interface CommonAsset {
-  id?: string;
+  _id?: string;
+  assetId?: string;
   amount: number;
   price: number;
   date?: number;
@@ -13,7 +14,7 @@ export interface CommonAsset {
   totalProfit?: number;
   grow?: boolean;
   name?: string;
-  priceAvg?: number;
+  priceAverage?: number;
   icon?: string;
   symbol?: string;
 }

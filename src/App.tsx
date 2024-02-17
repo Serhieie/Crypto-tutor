@@ -1,8 +1,8 @@
 import { fetchCurrentUser } from "./redux/auth/operations-auth";
 import AppLayout from "./components/AppLayout/AppLayout";
-// import { useAuth } from "./helpers/hooks/authSelector";
+import { useAuth } from "./helpers/hooks/authSelector";
 import { useDispatch } from "react-redux";
-// import { SuspenseLoader } from "./components/Loaders/SuspenseLoader";
+import { SuspenseLoader } from "./components/Loaders/SuspenseLoader";
 import { NoPage } from "./NoPage";
 import React, { useEffect, lazy } from "react";
 import PrivateRoute from "./Redirect/PrivateRoute";
@@ -17,15 +17,16 @@ export const Crypto = lazy(() => import("./components/AppLayout/MainContent"));
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
-  // const { isRefreshing } = useAuth();
-
+  const { isRefreshing } = useAuth();
   //fetch current user
   useEffect(() => {
     //how to type it correctly??
     dispatch(fetchCurrentUser() as any);
   }, [dispatch]);
 
-  return (
+  return isRefreshing ? (
+    <SuspenseLoader />
+  ) : (
     <Routes>
       <Route path="/" element={<AppLayout />}>
         <Route

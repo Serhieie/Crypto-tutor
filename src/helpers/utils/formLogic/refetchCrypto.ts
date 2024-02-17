@@ -9,9 +9,10 @@ export const refetchCrypto = (
   if (!stateAssets || !cryptoData) {
     return stateAssets || [];
   }
-
   return stateAssets.map((asset) => {
-    const matchingCrypto = cryptoData.result.find((crypto) => crypto.id === asset.id);
+    const matchingCrypto = cryptoData.result.find(
+      (crypto) => crypto.id === asset.assetId
+    );
 
     if (matchingCrypto) {
       const growPercent = calculateProfitPercentage(
@@ -26,7 +27,6 @@ export const refetchCrypto = (
         totalProfit: asset.amount * matchingCrypto.price - asset.price,
       };
     }
-
     return asset;
   });
 };

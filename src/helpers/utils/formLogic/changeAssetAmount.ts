@@ -5,25 +5,19 @@ import type {
 import { calculateProfitPercentage } from "../../calculateProfitPercentage";
 
 export const changeAssetAmount = (
-  stateAssets: CommonAsset[],
+  stateAssets: CommonAsset[] | undefined,
   coin: Cryptocurrency,
   amount: number
-): CommonAsset[] | undefined => {
-  if (!stateAssets || !coin) {
-    return stateAssets || [];
-  }
-
-  return stateAssets.map((asset) => {
-    if (asset.id === coin.id) {
-      const growPercent = calculateProfitPercentage(asset.price / amount, coin.price);
-      return {
-        ...asset,
-        growPercent: growPercent,
-        amount: amount,
-        totalAmount: amount * coin.price,
-        totalProfit: amount * coin.price - asset.price,
-      };
-    }
-    return asset;
-  });
+): CommonAsset | undefined => {
+  const assetFinded = stateAssets?.find((asset) => asset.assetId === coin.id);
+  if (!assetFinded) return;
+  const growPercent = calculateProfitPercentage(assetFinded.price / amount, coin.price);
+  const assetToUpdate = {
+    ...assetFinded,
+    growPercent: growPercent,
+    amount: amount,
+    totalAmount: amount * coin.price,
+    totalProfit: amount * coin.price - assetFinded.price,
+  };
+  return assetToUpdate;
 };

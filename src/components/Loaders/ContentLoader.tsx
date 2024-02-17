@@ -7,14 +7,14 @@ export const ContentLoader: React.FC = () => {
   return (
     <div
       className={`
-        ${isCoinShowed && assets.length > 0 ? " hidden " : " "}
-      ${!assets.length ? " w-[100%] " : "  w-[78%]  lg:w-[100%] "}
+        ${isCoinShowed && assets.length > 0 ? " hidden " : " w-[75%] "}
+      ${!assets.length ? " w-[100%] " : "  w-[75%]  lg:w-[100%] "}
       text-center   h-full min-h-[calc(100vh-86px)]
        text-sky-200 bg-[#1E293B] p-4 transition-all rounded-2xl overflow-hidden `}
     >
       <div
         className="flex items-center justify-center 
-        h-full w-[100%] mt-72"
+        h-full w-[100%] mt-[26%]"
       >
         <Spin size="large" />
       </div>

@@ -32,7 +32,7 @@ export const CoinCard: React.FC<CoininfoModalProps> = ({ coin }) => {
           { title: "Asset Amount", value: coin?.amount, isPlain: true },
           {
             title: "Avr Price",
-            value: coin?.priceAvg || coin?.price,
+            value: coin?.priceAverage || coin?.price,
           },
         ]}
         renderItem={(item) => (

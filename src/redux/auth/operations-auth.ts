@@ -16,9 +16,7 @@ import {
   failedChangePasswordEmail,
   failedChangePassword,
 } from "../../helpers/notiflix";
-
 axios.defaults.baseURL = "https://crypto-helper.onrender.com/api/";
-
 export const token = {
   set(token: string) {
     axios.defaults.headers.common.Authorization = `Bearer ${token}`;

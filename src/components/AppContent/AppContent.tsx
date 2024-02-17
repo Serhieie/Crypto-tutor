@@ -4,6 +4,7 @@ import { PortfolioChart } from "../PortfolioChart/PortfolioChart";
 import { AssetsTable } from "../AssetsTable";
 import { PiCoinsLight } from "react-icons/pi";
 import { useGetAllCryptoQuery } from "../../redux/crypto/cryptoApi";
+import { useGetAllAssetsQuery } from "../../redux/crypto/assetsApi";
 import { useCryptoState } from "../../helpers/hooks/cryptoSelector";
 import {
   setIsDrawerOpen,
@@ -20,14 +21,9 @@ import { ContentLoader } from "../Loaders/ContentLoader";
 export const AppContent = () => {
   const dispatch = useDispatch();
   const { data, isLoading } = useGetAllCryptoQuery();
-  const {
-    isCoinShowed,
-    assetToShowId,
-    isChartLineOpen,
-    isChartPieOpen,
-    isTableOpen,
-    assets,
-  } = useCryptoState();
+  const { data: assets, isLoading: loadAssets } = useGetAllAssetsQuery();
+  const { isCoinShowed, assetToShowId, isChartLineOpen, isChartPieOpen, isTableOpen } =
+    useCryptoState();
 
   const handleChangeChart = () => {
     if (isChartPieOpen) return;
@@ -51,7 +47,7 @@ export const AppContent = () => {
     dispatch(setIsDrawerOpen(true));
   };
 
-  if (isLoading) {
+  if ((!isCoinShowed && isLoading) || (!isCoinShowed && loadAssets)) {
     return <ContentLoader />;
   }
 
@@ -59,11 +55,11 @@ export const AppContent = () => {
     data?.result && (
       <div
         className={`
-    ${!assets.length ? "w-[100%]" : "w-[78%] md:w-[100%] "}
-    ${isCoinShowed && assets.length ? "hidden" : "w-[100%] lg:w-[100%] "}
+    ${!assets?.length ? "w-[100%]" : "w-[75%] md:w-[100%] "}
+    ${isCoinShowed && assets?.length ? "hidden" : "w-[100%] lg:w-[100%] "}
     text-center h-full min-h-[calc(100vh-86px)] text-sky-200 bg-[#1E293B] p-4 font-montserrat rounded-2xl overflow-hidden`}
       >
-        {assets.length > 0 && (
+        {assets && assets.length > 0 && (
           <div className="flex justify-center gap-2 flex-wrap">
             <Button
               onClick={handleChangeChart}
@@ -99,7 +95,7 @@ export const AppContent = () => {
             </Button>
           </div>
         )}
-        {!assets.length && (
+        {!assets?.length && (
           <>
             <div className="flex flex-col items-center justify-center mt-32">
               <PiCoinsLight size={120} />
@@ -117,7 +113,7 @@ export const AppContent = () => {
           </>
         )}
 
-        {assets.length > 0 && (
+        {assets && assets.length > 0 && (
           <>
             {isChartLineOpen && <PortfolioChartLine id={assetToShowId} />}
             {isChartPieOpen && <PortfolioChart />}

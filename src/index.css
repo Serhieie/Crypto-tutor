@@ -71,6 +71,10 @@ button,
   background-color: transparent;
 }
 
+#addRemoveAmount {
+  background-color: #dbeafe;
+}
+
 #cancel-btn,
 #delete-btn {
   font-weight: 600;

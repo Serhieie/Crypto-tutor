@@ -4,18 +4,18 @@ import { useEffect, useState } from "react";
 import type { Cryptocurrency } from "../redux/crypto/Cryptocurency.types";
 import type { CommonAsset } from "../redux/crypto/Cryptocurency.types";
 import { CoinCard } from "./CoinCard";
-import { useCryptoState } from "../helpers/hooks/cryptoSelector";
+import { useGetAllAssetsQuery } from "../redux/crypto/assetsApi";
 
 interface CoininfoModalProps {
   coin: Cryptocurrency | null;
 }
 
 export const CoinInfoModal: React.FC<CoininfoModalProps> = ({ coin }) => {
-  const { assets } = useCryptoState();
+  const { data: assets } = useGetAllAssetsQuery();
   const [assetCoin, setAssetCoin] = useState<CommonAsset | null>(null);
 
   const findCoinById = (assets: CommonAsset[], coin: Cryptocurrency) => {
-    const isCoinInWallet = assets.find((asset) => asset.id === coin.id);
+    const isCoinInWallet = assets.find((asset) => asset.assetId === coin.id);
 
     if (isCoinInWallet) {
       setAssetCoin(isCoinInWallet);
@@ -25,7 +25,7 @@ export const CoinInfoModal: React.FC<CoininfoModalProps> = ({ coin }) => {
   };
 
   useEffect(() => {
-    if (coin) findCoinById(assets, coin);
+    if (coin && assets) findCoinById(assets, coin);
   }, [assets, coin]);
 
   return (

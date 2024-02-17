@@ -55,7 +55,6 @@ export const ChangePasswordPage: React.FC = () => {
     values: { password: string },
     { resetForm }: { resetForm: () => void }
   ) => {
-    console.log(changePasswordCode);
     const { password } = values;
     if (!changePasswordCode) return;
     const newPassword = {

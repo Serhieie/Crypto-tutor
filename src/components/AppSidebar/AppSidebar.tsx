@@ -3,12 +3,11 @@ import { CardList } from "./CardList";
 import { CardHeader } from "./CardHeader";
 import { useState, useMemo, useEffect } from "react";
 import { changeAssetAmount } from "../../helpers/utils/formLogic/changeAssetAmount";
-import type { Cryptocurrency } from "../../redux/crypto/Cryptocurency.types";
+import type { CommonAsset, Cryptocurrency } from "../../redux/crypto/Cryptocurency.types";
 import { useGetAllCryptoQuery } from "../../redux/crypto/cryptoApi";
 import { useCryptoState } from "../../helpers/hooks/cryptoSelector";
 import { useDispatch } from "react-redux";
 import {
-  changeAssets,
   setAssetToShow,
   setIsCoinsShowed,
   setIsChartLineOpen,
@@ -20,12 +19,24 @@ import {
 } from "../../redux/crypto/dashboardSlice";
 import { refetchCrypto } from "../../helpers/utils/formLogic/refetchCrypto";
 import { DeleteModal } from "./DeleteModal/DeleteModal";
+import {
+  useGetAllAssetsQuery,
+  useUpdateAllAssetsMutation,
+  useUpdateAssetMutation,
+} from "../../redux/crypto/assetsApi";
 
 export const AppSidebar: React.FC = () => {
   const dispatch = useDispatch();
-  const { isDeleteModalOpen, isCoinShowed, assets, filterValue } = useCryptoState();
+  const { data: assets } = useGetAllAssetsQuery();
+  const [updateAllAssets] = useUpdateAllAssetsMutation();
+  const [updateAsset] = useUpdateAssetMutation();
+  const { isDeleteModalOpen, isCoinShowed, filterValue } = useCryptoState();
   const { data, refetch } = useGetAllCryptoQuery();
   const [coinForUpdate, setCoinForUpdate] = useState<Cryptocurrency>();
+
+  const updateAssetAtDb = (dataId: string | undefined, asset: CommonAsset) => {
+    updateAsset({ dataId, asset });
+  };
 
   //every 60 sec updating data and changing coin price
   useEffect(() => {
@@ -33,13 +44,13 @@ export const AppSidebar: React.FC = () => {
       try {
         await refetch();
         const updatedAssets = refetchCrypto(assets, data);
-        if (updatedAssets) dispatch(changeAssets(updatedAssets));
+        if (updatedAssets) await updateAllAssets(updatedAssets);
       } catch (error) {
         console.error("Error updating assets:", error);
       }
-    }, 60000);
+    }, 40000);
     return () => clearInterval(intervalId);
-  }, [refetch, assets, data, dispatch]);
+  }, [refetch, assets, data, dispatch, updateAllAssets]);
 
   //filter func
   const getVisibleContacts = useMemo(() => {
@@ -48,8 +59,8 @@ export const AppSidebar: React.FC = () => {
       return [];
     }
     const filteredContacts = assets.filter(
-      ({ id, name }) =>
-        id?.toLowerCase().includes(normalizedFilter) ||
+      ({ assetId, name }) =>
+        assetId?.toLowerCase().includes(normalizedFilter) ||
         name?.toLowerCase().includes(normalizedFilter)
     );
     return filteredContacts;
@@ -63,6 +74,7 @@ export const AppSidebar: React.FC = () => {
       const clickedElement = event.target as HTMLElement;
       const isButton = clickedElement.id === "close-card-button";
       const isInput = clickedElement.id === `amount-of-asset`;
+      const formId = clickedElement.id === `addRemoveAmount`;
       const isChartBtn = clickedElement.id === `open-chart-btn`;
       const cryptoId = clickedElement.dataset.cryptoId;
       const selectedCoin = data?.result.find(
@@ -80,7 +92,7 @@ export const AppSidebar: React.FC = () => {
         dispatch(setIsChartLineOpen(true));
       }
       //let to input number
-      else if (isInput) return;
+      else if (formId || isInput) return;
       //add toin to modal and open it
       else if (selectedCoin && !isButton) {
         dispatch(setIsModalOpen(true));
@@ -88,29 +100,29 @@ export const AppSidebar: React.FC = () => {
       }
       //handle delete asset
       else if (isButton && cryptoId) {
-        dispatch(setIsDeleteModalOpen());
+        dispatch(setIsDeleteModalOpen(true));
       }
     }
   };
 
   //changing amount of asset BUT without updating priceAvr and Price
-  const handleChangeAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeAmount = (value: number) => {
     if (coinForUpdate) {
-      const newAmount = Number(event.target.value);
+      const newAmount = Number(value);
       if (isNaN(newAmount)) return;
-      const changedAsset = changeAssetAmount(assets, coinForUpdate, newAmount);
-      if (changedAsset) dispatch(changeAssets([...changedAsset]));
+      const assetFordbupdt = changeAssetAmount(assets, coinForUpdate, newAmount);
+      if (assetFordbupdt) updateAssetAtDb(assetFordbupdt._id, assetFordbupdt);
     }
   };
 
   return (
     <div
       className={`
-      ${assets.length ? " grid " : " hidden "}
+      ${assets?.length ? " grid " : " hidden "}
       ${
         isCoinShowed
           ? " w-[100%] grid-cols-1 ssm2:grid-cols-1 md:grid-cols-2 md3:grid-cols-3 1xl2:grid-cols-4 gap-2  gap-y-2 p-2  auto-rows-min "
-          : " w-[22%] grid-cols-1 gap-1 lg:hidden auto-rows-max rounded-2xl overflow-hidden pr-1"
+          : " w-[25%] grid-cols-1 gap-1 lg:hidden auto-rows-max rounded-2xl overflow-hidden pr-1"
       }
           overflow-y-scroll   h-[calc(100vh-86px)]
         bg-[#0F172A]  grid   p-2   `}
@@ -121,8 +133,8 @@ export const AppSidebar: React.FC = () => {
           ${isCoinShowed ? "  " : " w-[96%] "}
              rounded-xl   bg-white   p-2 `}
           onClick={handleClick}
-          id={asset.id}
-          key={asset.id}
+          id={asset.assetId}
+          key={asset.assetId}
         >
           <CardHeader asset={asset} />
           <SideBarStatistic asset={asset} />

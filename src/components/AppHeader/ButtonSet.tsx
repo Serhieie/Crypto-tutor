@@ -6,11 +6,13 @@ import { useDispatch } from "react-redux";
 import { setIsCalculatorOpen } from "../../redux/calculator/calculatorSlice";
 import { setIsCoinsShowed, setIsDrawerOpen } from "../../redux/crypto/dashboardSlice";
 import { useCalculatorState } from "../../helpers/hooks/calculatorSelectors";
+import { useGetAllAssetsQuery } from "../../redux/crypto/assetsApi";
 
 export const ButtonSet: React.FC = () => {
   const dispatch = useDispatch();
+  const { data: assets } = useGetAllAssetsQuery();
   const { isCalculatorOpen } = useCalculatorState();
-  const { isCoinShowed, assets } = useCryptoState();
+  const { isCoinShowed } = useCryptoState();
 
   const handleLogout = async () => {
     dispatch(logout() as any);
@@ -30,7 +32,7 @@ export const ButtonSet: React.FC = () => {
   return (
     <div className="ml-auto items-center  mr-2 flex md:flex-wrap md:mx-auto  1xl2:flex-row gap-3">
       {" "}
-      {assets.length > 0 ? (
+      {assets && assets.length > 0 ? (
         <>
           {" "}
           <Button

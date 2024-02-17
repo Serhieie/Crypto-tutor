@@ -28,7 +28,7 @@ export const isAssetMustBeChanged = (
         (updatedAssets[existingAssetIndex].amount + newAsset.amount) *
         coin?.price
       ).toFixed(4),
-      priceAvg: +(
+      priceAverage: +(
         (updatedAssets[existingAssetIndex].price + newAsset.amount * newAsset.price) /
         (updatedAssets[existingAssetIndex].amount + newAsset.amount)
       ).toFixed(4),
@@ -42,6 +42,6 @@ export const isAssetMustBeChanged = (
         newAsset.amount * coin?.price -
         (updatedAssets[existingAssetIndex].price + newAsset.amount * newAsset.price),
     };
-    return updatedAssets;
+    return updatedAssets[existingAssetIndex];
   }
 };

@@ -2,10 +2,15 @@ import type { Cryptocurrency } from "../../redux/crypto/Cryptocurency.types";
 import { PiHandCoinsLight } from "react-icons/pi";
 import { CoinLabel } from "../CoinLabel";
 import type { CommonAsset } from "../../redux/crypto/Cryptocurency.types";
-import { useDispatch, useSelector } from "react-redux";
 import { useState, useRef, useEffect } from "react";
 import { useGetAllCryptoQuery } from "../../redux/crypto/cryptoApi";
-import { getAssets } from "../../redux/crypto/dashboardSlice";
+import { UpdateAssetInterface } from "../../redux/crypto/assetsApi";
+import {
+  useAddAssetMutation,
+  useGetAllAssetsQuery,
+  useUpdateAssetMutation,
+} from "../../redux/crypto/assetsApi";
+// import { getAssets } from "../../redux/crypto/dashboardSlice";
 import { isAssetInState } from "../../helpers/utils/formLogic/formFunctionLogic";
 import type { AddAssetFormProps, FieldType } from "./AddAssetForm.types";
 import { validateMessages } from "./validationMessages";
@@ -18,15 +23,16 @@ import { ResultComponent } from "./ResultComponent";
 //This Prop is close drower function witch is trigger it after submitting
 
 export const AddAssetForm: React.FC<AddAssetFormProps> = ({ onCloseResult }) => {
-  const dispatch = useDispatch();
+  const { data: dataAssets } = useGetAllAssetsQuery();
+  const [updateAssetMutation] = useUpdateAssetMutation();
+  const [addAssetMutation] = useAddAssetMutation();
   const { data } = useGetAllCryptoQuery();
   const [form] = Form.useForm<FieldType>();
   const [select, setSelect] = useState<boolean>(false);
   const [coin, setCoin] = useState<Cryptocurrency>();
-  const assets = useSelector(getAssets);
+  // const assets = useSelector(getAssets);
   const [issResultVisible, setIsResultVisible] = useState<boolean>(false);
   const assetRef = useRef<CommonAsset | undefined>();
-
   useEffect(() => {
     if (coin?.price) {
       form.setFieldsValue({
@@ -35,15 +41,22 @@ export const AddAssetForm: React.FC<AddAssetFormProps> = ({ onCloseResult }) => 
     }
   }, [coin, form]);
 
+  const addAssetToDb = (asset: CommonAsset) => {
+    addAssetMutation(asset);
+  };
+  const updateAssetAtDb = (asset: UpdateAssetInterface) => {
+    updateAssetMutation(asset);
+  };
+
   const onFinish = (values: FieldType) => {
     const newAsset: CommonAsset = {
-      id: coin?.id,
+      assetId: coin?.id,
       amount: values.amount,
       price: values.price || 0,
       date: values.date ? values.date : new Date().getTime(),
     };
     assetRef.current = newAsset;
-    isAssetInState(assets, newAsset, coin, dispatch, data);
+    isAssetInState(dataAssets, newAsset, coin, addAssetToDb, updateAssetAtDb, data);
     setIsResultVisible((state) => !state);
   };
 
@@ -59,9 +72,11 @@ export const AddAssetForm: React.FC<AddAssetFormProps> = ({ onCloseResult }) => 
       form.setFieldValue("total", (amount * value).toFixed(4));
     }
   };
+
   const onBuyMore = () => {
     setIsResultVisible(false);
   };
+
   const handleSelect = (value: string | number) => {
     const selectedCoin = data?.result.find((coin) => coin.id === value);
     setCoin(selectedCoin);

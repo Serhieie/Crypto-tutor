@@ -3,7 +3,10 @@ import { useDispatch } from "react-redux";
 import { Cryptocurrency } from "../AppSideBar.types";
 import { GetAllCryptoResponse } from "../../../redux/crypto/cryptoApi";
 import {
-  removeAsset,
+  useGetAllAssetsQuery,
+  useDeleteAssetMutation,
+} from "../../../redux/crypto/assetsApi";
+import {
   setAssetToShow,
   setIsChartLineOpen,
   setIsChartPieOpen,
@@ -19,10 +22,12 @@ interface DeleteModalProps {
 
 export const DeleteModal: React.FC<DeleteModalProps> = ({ data, coinForUpdate }) => {
   const dispatch = useDispatch();
+  const { data: assets } = useGetAllAssetsQuery();
+  const [deleteAsset] = useDeleteAssetMutation();
   const { isDeleteModalOpen } = useCryptoState();
 
   const handleCloseDeleteModal = () => {
-    dispatch(setIsDeleteModalOpen());
+    dispatch(setIsDeleteModalOpen(false));
   };
 
   const handleDeleteAtDeleteModal = (
@@ -32,14 +37,15 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({ data, coinForUpdate })
       const buttonId = event.currentTarget.id;
       const buttonDataSetId = event.currentTarget.dataset.delete;
       const selectedCoin = data?.result.find((crypto) => crypto.id === buttonDataSetId);
+      const assetToDelete = assets?.find((asset) => asset.assetId === selectedCoin?.id);
 
-      if (buttonId === "delete-btn" && selectedCoin) {
-        dispatch(removeAsset(selectedCoin.id));
+      if (buttonId === "delete-btn" && selectedCoin && assetToDelete?._id) {
         dispatch(setIsChartPieOpen(true));
         dispatch(setIsTableOpen(false));
         dispatch(setIsChartLineOpen(false));
         dispatch(setAssetToShow(null));
-        dispatch(setIsDeleteModalOpen());
+        dispatch(setIsDeleteModalOpen(false));
+        deleteAsset(assetToDelete?._id);
       }
     }
   };

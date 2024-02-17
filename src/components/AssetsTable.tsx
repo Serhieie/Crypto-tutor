@@ -1,6 +1,6 @@
 import { Table } from "antd";
 import type { TableColumnsType } from "antd";
-import { useCryptoState } from "../helpers/hooks/cryptoSelector";
+import { useGetAllAssetsQuery } from "../redux/crypto/assetsApi";
 
 interface DataType {
   key: React.Key | undefined;
@@ -10,7 +10,7 @@ interface DataType {
 }
 
 export const AssetsTable = () => {
-  const { assets } = useCryptoState();
+  const { data: assets } = useGetAllAssetsQuery();
 
   const columns: TableColumnsType<DataType> = [
     {
@@ -33,8 +33,8 @@ export const AssetsTable = () => {
     },
   ];
 
-  const dataAssets: DataType[] = assets.map((asset) => ({
-    key: asset?.id,
+  const dataAssets: DataType[] | undefined = assets?.map((asset) => ({
+    key: asset?.assetId,
     name: asset?.name,
     price: asset?.price,
     amount: asset?.amount,

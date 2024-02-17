@@ -21,7 +21,7 @@ export const CardHeader: React.FC<CardHeaderProps> = ({ asset }) => {
       )}
       <button
         id="close-card-button"
-        data-crypto-id={asset.id}
+        data-crypto-id={asset.assetId}
         type="button"
         className="bg-green p-1 "
       >

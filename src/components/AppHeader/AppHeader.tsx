@@ -18,11 +18,13 @@ import {
 } from "../../redux/crypto/dashboardSlice";
 import { useDispatch } from "react-redux";
 import { Calculator } from "../calculator/components/App/Calculator";
+import { useGetAllAssetsQuery } from "../../redux/crypto/assetsApi";
 
 export const AppHeader: React.FC = () => {
   const dispatch = useDispatch();
   const { isCalculatorOpen } = useCalculatorState();
-  const { isDrawerOpen, assets } = useCryptoState();
+  const { data: assets } = useGetAllAssetsQuery();
+  const { isDrawerOpen } = useCryptoState();
   const [select, setSelect] = useState<boolean>(false);
   const { data } = useGetAllCryptoQuery();
 
@@ -55,16 +57,16 @@ export const AppHeader: React.FC = () => {
   );
 
   const portfolioValue = assets
-    .map((asset) => {
-      if (data?.result.length && asset.id && cryptoCardMap) {
-        return Number((asset.amount ?? 0) * cryptoCardMap[asset.id]);
+    ?.map((asset) => {
+      if (data?.result.length && asset.assetId && cryptoCardMap) {
+        return Number((asset.amount ?? 0) * cryptoCardMap[asset.assetId]);
       }
       return 0;
     })
     .reduce((acc, value) => acc + value, 0);
 
   const portfolioProffit = assets
-    .map((asset) => {
+    ?.map((asset) => {
       if (data?.result.length) {
         return Number(asset.price);
       }
@@ -80,7 +82,9 @@ export const AppHeader: React.FC = () => {
     <Layout.Header
       className={`
       ${
-        !assets.length ? " md:h-[105px]  md2:h-32" : " md:h-40 md2:h-28 lg2:h-28 "
+        assets && !assets.length
+          ? " md:h-[105px]  md2:h-32"
+          : " md:h-40 md2:h-28 lg2:h-28 "
       }  sm:gap-1 sm:px-1 md:py-2   md:gap-3 gap-0  flex md:flex-col 
       md3:flex-wrap  shadow-md  shadow-shadowBoxDark `}
       style={{
@@ -102,15 +106,17 @@ export const AppHeader: React.FC = () => {
            font-bold  text-blue-200 text-sm md:text-xs min-w-[110px]  flex items-center gap-1 "
           >
             Value :{" "}
-            <span
-              className={`${
-                portfolioValue - portfolioProffit >= 0
-                  ? " text-green-400 "
-                  : " text-red-400 "
-              } text-lg md:text-xs`}
-            >
-              {portfolioValue.toFixed(2)}$
-            </span>
+            {portfolioValue && portfolioProffit && (
+              <span
+                className={`${
+                  portfolioValue - portfolioProffit >= 0
+                    ? " text-green-400 "
+                    : " text-red-400 "
+                } text-lg md:text-xs`}
+              >
+                {portfolioValue?.toFixed(2)}$
+              </span>
+            )}
           </p>
           <RxDividerVertical size={26} className=" text-blue-500 " />
           <p
@@ -118,15 +124,17 @@ export const AppHeader: React.FC = () => {
            font-bold  text-blue-200 min-w-[110px]  text-sm md:text-xs  flex items-center gap-1 "
           >
             Profit :{" "}
-            <span
-              className={`${
-                portfolioValue - portfolioProffit >= 0
-                  ? " text-green-400 "
-                  : " text-red-400 "
-              }  text-lg  md:text-xs`}
-            >
-              {(portfolioValue - portfolioProffit).toFixed(2)}$
-            </span>
+            {portfolioValue && portfolioProffit && (
+              <span
+                className={`${
+                  portfolioValue - portfolioProffit >= 0
+                    ? " text-green-400 "
+                    : " text-red-400 "
+                }  text-lg  md:text-xs`}
+              >
+                {(portfolioValue - portfolioProffit).toFixed(2)}$
+              </span>
+            )}
           </p>
         </div>
 
@@ -167,7 +175,7 @@ export const AppHeader: React.FC = () => {
         </button>
       </div>
       <div className="flex gap-2 ml-auto md:flex-col-reverse md:mx-auto  ">
-        {assets.length > 0 && (
+        {assets && assets.length > 0 && (
           <div
             className="flex items-center  lg:mx-auto sm:flex 
           md:gap-3 md:flex-col-reverse  p-0 gap-6"

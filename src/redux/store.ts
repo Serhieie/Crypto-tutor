@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { cryptoApi } from "./crypto/cryptoApi";
+import { assetApi } from "./crypto/assetsApi";
 import rootReducer from "./rootReducer";
 import {
   persistStore,
@@ -19,7 +20,9 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(cryptoApi.middleware),
+    })
+      .concat(cryptoApi.middleware)
+      .concat(assetApi.middleware),
 });
 
 export const persistor = persistStore(store);

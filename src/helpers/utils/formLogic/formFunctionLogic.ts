@@ -2,17 +2,17 @@ import { calculateProfitPercentage } from "../../calculateProfitPercentage";
 import type { CommonAsset } from "../../../redux/crypto/Cryptocurency.types";
 import type { Cryptocurrency } from "../../../redux/crypto/Cryptocurency.types";
 import { isAssetMustBeChanged } from "./assetMustBeChanged";
-import { changeAssets } from "../../../redux/crypto/dashboardSlice";
+import { UpdateAssetInterface } from "../../../redux/crypto/assetsApi";
 import type { GetAllCryptoResponse } from "../../../redux/crypto/cryptoApi";
-import { Dispatch } from "redux";
 
 export const mapAssets = (
   stateAssets: CommonAsset[],
-  cryptocurrencyData: GetAllCryptoResponse | undefined
+  cryptocurrencyData: GetAllCryptoResponse | undefined,
+  addAssetMutation: (asset: CommonAsset) => void
 ): CommonAsset[] | undefined => {
   if (stateAssets && cryptocurrencyData) {
     return stateAssets.map((asset) => {
-      const coin = cryptocurrencyData.result.find((c) => c.id === asset.id);
+      const coin = cryptocurrencyData.result.find((c) => c.id === asset.assetId);
       if (coin) {
         const growPercent = calculateProfitPercentage(asset.price ?? 0, coin.price ?? 0);
         const obj: CommonAsset = {
@@ -26,12 +26,14 @@ export const mapAssets = (
           price: asset.price * asset.amount,
           growPercent: growPercent,
           totalAmount: (asset.amount ?? 0) * (coin.price ?? 0),
-          priceAvg: asset.price,
+          priceAverage: asset.price,
           totalProfit:
             (asset.amount ?? 0) * (coin.price ?? 0) -
             (asset.amount ?? 0) * (asset.price ?? 0),
           name: coin.name,
         };
+
+        addAssetMutation(obj);
         return obj;
       }
       return asset;
@@ -41,32 +43,35 @@ export const mapAssets = (
 };
 
 export const isAssetInState = (
-  stateAssets: CommonAsset[] | undefined,
+  dataAssets: CommonAsset[] | undefined,
   newAsset: CommonAsset,
   coin: Cryptocurrency | undefined,
-  dispatch: Dispatch,
+  addAssetMutation: (asset: CommonAsset) => void,
+  updateAssetMutation: (asset: UpdateAssetInterface) => void,
   data: GetAllCryptoResponse | undefined
 ) => {
-  if (stateAssets) {
-    //are newAsset in Portfolio?
-    const existingAssetIndex = stateAssets.findIndex((asset) => asset.id === newAsset.id);
+  if (dataAssets) {
+    let dataId: string | undefined = "";
+    const existingAssetIndex = dataAssets.findIndex((asset) => {
+      if (asset.assetId === newAsset.assetId) {
+        dataId = asset._id;
+      }
+      return asset.assetId === newAsset.assetId;
+    });
     if (existingAssetIndex !== -1) {
       //adding asset by calculating all needed keys
       const updatedAssets = isAssetMustBeChanged(
-        stateAssets,
+        dataAssets,
         newAsset,
         coin,
         existingAssetIndex
       );
-      return dispatch(changeAssets(updatedAssets || []));
+      updateAssetMutation({ dataId, asset: updatedAssets });
+      return;
     } else {
       //creating new asset
-      const mappedAsset = mapAssets([newAsset], data);
-      return dispatch(
-        changeAssets(
-          mappedAsset ? [...stateAssets, ...mappedAsset] : [...stateAssets, newAsset]
-        )
-      );
+      mapAssets([newAsset], data, addAssetMutation);
+      return;
     }
   }
 };
