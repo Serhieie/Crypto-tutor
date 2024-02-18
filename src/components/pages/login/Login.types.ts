@@ -8,4 +8,5 @@ export interface LoginFormButtonProps {
   isLoading: boolean;
   onClick?: () => void;
   timeRemaining?: number;
+  styles?: string;
 }

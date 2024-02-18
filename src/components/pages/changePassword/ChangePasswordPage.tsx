@@ -87,7 +87,11 @@ export const ChangePasswordPage: React.FC = () => {
               fieldsStyle={fieldsStyle}
               labelText={"New password"}
             />
-            <LoginFormButton isLoading={isRefreshing} text="Change Password" />
+            <LoginFormButton
+              isLoading={isRefreshing}
+              text="Change Password"
+              styles={""}
+            />
           </Form>
         </Formik>
       ) : null}
