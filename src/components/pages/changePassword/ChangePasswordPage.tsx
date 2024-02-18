@@ -90,7 +90,7 @@ export const ChangePasswordPage: React.FC = () => {
             <LoginFormButton
               isLoading={isRefreshing}
               text="Change Password"
-              styles={""}
+              styles=" py-6 mt-4"
             />
           </Form>
         </Formik>
