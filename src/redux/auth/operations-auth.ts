@@ -112,8 +112,15 @@ export const fetchCurrentUser = createAsyncThunk<UserData, void, { rejectValue: 
       const { data }: AxiosResponse<UserData> = await axios.get("auth/current");
       return data;
     } catch (error) {
+      token.unset();
       return thunkApi.rejectWithValue("error");
     }
+  },
+  {
+    condition: (_, { getState }) => {
+      const { auth } = getState() as AuthStateForOptions;
+      return !!auth.token;
+    },
   }
 );
 
