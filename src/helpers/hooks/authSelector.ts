@@ -9,8 +9,10 @@ import {
   getUserData,
   getAvatar,
   getIsVerifyModalOpen,
+  getIsChangePasswordModalOpen,
   getChangingPass,
   getResended,
+  getTimeRemaining,
 } from "../../redux/auth/selectors-auth";
 
 export interface useAuthReturn {
@@ -22,8 +24,10 @@ export interface useAuthReturn {
   avatar: string;
   fullAuth: AuthState;
   isVerifyModalOpen: boolean;
+  isChangePasswordModalOpen: boolean;
   changingPass: boolean;
   resended: boolean;
+  timeRemaining: number;
 }
 
 export const useAuth = (): useAuthReturn => {
@@ -35,8 +39,10 @@ export const useAuth = (): useAuthReturn => {
   const avatar: string = useSelector(getAvatar);
   const fullAuth: AuthState = useSelector(getUserAuth);
   const isVerifyModalOpen: boolean = useSelector(getIsVerifyModalOpen);
+  const isChangePasswordModalOpen: boolean = useSelector(getIsChangePasswordModalOpen);
   const changingPass: boolean = useSelector(getChangingPass);
   const resended: boolean = useSelector(getResended);
+  const timeRemaining: number = useSelector(getTimeRemaining);
 
   return {
     isLoggedIn,
@@ -47,7 +53,9 @@ export const useAuth = (): useAuthReturn => {
     error,
     avatar,
     isVerifyModalOpen,
+    isChangePasswordModalOpen,
     changingPass,
     resended,
+    timeRemaining,
   };
 };

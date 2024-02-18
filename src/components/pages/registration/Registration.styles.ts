@@ -10,4 +10,4 @@ export const registrationFormStyles: string = `flex gap-2 flex-col pt-10 1xl2:pt
 export const registrationSubmitBtnStyles: string = `text-lg md:w-48 text-center 
 font-medium  w-40 h-11  border-none outline-none  font-montserrat
       mx-auto cursor-pointer shadow-md mt-4 flex items-center justify-around
-      transition-all duration-30 ssm:w-40 ssm:h-10 md2:text-sm`;
+      transition-all duration-30 ssm:w-40 ssm:h-10 md2:text-sm  font-semibold `;

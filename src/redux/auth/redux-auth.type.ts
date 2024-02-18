@@ -11,6 +11,8 @@ export interface AuthState {
   avatar: string;
   error: boolean;
   isVerifyModalOpen: boolean;
+  isChangePasswordModalOpen: boolean;
+  timeRemaining: number;
   changingPass: boolean;
   resended: boolean;
 }

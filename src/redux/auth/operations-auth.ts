@@ -135,15 +135,17 @@ export const changePasswordRequest = createAsyncThunk<
   { rejectValue: string }
 >("auth/changeRequest", async (credentials: { email: string }, thunkApi) => {
   try {
+    console.log(credentials);
     await axios.post("auth/verify/changePassword", credentials);
   } catch (error) {
+    console.log(credentials, error);
     failedChangePasswordEmail();
     return thunkApi.rejectWithValue("error");
   }
 });
 export const changePassword = createAsyncThunk<
   void,
-  { password: string; changePasswordCode: string }, // Додайте changePasswordCode до типів аргументів
+  { password: string; changePasswordCode: string },
   { rejectValue: string }
 >(
   "auth/changePassword",

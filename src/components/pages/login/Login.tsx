@@ -40,8 +40,13 @@ const Login: React.FC = () => {
     }, 1000);
   };
 
+  if (timeRemaining < 30) {
+    if (isRefreshing) dispatch(setResended(false));
+  }
+
   const closeVerifyModal = () => {
     dispatch(setIsVerifyModalOpen(false));
+    dispatch(setResended(false));
   };
 
   const handleResize = (): void => {
@@ -80,32 +85,39 @@ const Login: React.FC = () => {
     windowSize.height > 460 ? "md3:w-5/12 pb-12" : "md3:w-10/12   md2:mt-1 pb-1";
   const formThemeStyles =
     " shadow-shadowBoxDark from-smallWraperGradient1Dark to-smallWraperGradient2Dark ";
+  const themeStyles: string = `
+  'shadow-none hover:bg-blue-700 text-buttonTextColorDark  bg-blue-900'
+     text-center text-lg md:w-48 font-semibold w-40 h-11 rounded-md border-none outline-none 
+      mx-auto cursor-pointer shadow-md  mb-8 flex items-center justify-around transition-all duration-300 
+      ssm:w-40 ssm:h-10 md2:text-sm disabled:opacity-30   font-montserrat `;
 
   return (
     <>
       <Modal open={isVerifyModalOpen} onCancel={closeVerifyModal} footer={null}>
-        <h1 className=" text-3xl text-center mb-8 text-slate-700">
+        <h1 className=" text-3xl text-center mb-8 text-slate-700 font-montserrat ">
           Email is not verified
         </h1>
-        <p className="text-lg text-center text-slate-500">
+        <p className="text-lg text-center font-montserrat text-slate-500">
           Before start you should verify email
         </p>
-        <p className="mt-3 text-lg text-center text-blue-900  font-semibold">
+        <p className="mt-3 text-lg text-center text-blue-900 font-montserrat  font-semibold">
           {user.email}
         </p>
-        <div className="flex mt-12">
+        <div className="flex mt-12 items-center">
           <LoginFormButton
             text="Accept"
             isLoading={isRefreshing}
             onClick={closeVerifyModal}
           />
-          <LoginFormButton
-            text="Resent Email"
-            isLoading={isRefreshing}
+          <button
+            id="reg-btn-resend"
+            type="button"
             onClick={handleResentEmail}
-            resended={resended}
-            timeRemaining={timeRemaining}
-          />
+            disabled={resended || timeRemaining < 30 ? true : false}
+            className={themeStyles}
+          >
+            {timeRemaining < 30 ? `${timeRemaining} sec` : "Resend"}
+          </button>
         </div>
       </Modal>
       <form

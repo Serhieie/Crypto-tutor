@@ -92,12 +92,14 @@ button,
 }
 
 #log-btn,
-#reg-btn {
+#reg-btn,
+#reg-btn-resend {
   background-color: #1e3a8a;
 }
 
 #log-btn:hover,
-#reg-btn:hover {
+#reg-btn:hover,
+#reg-btn-resend:hover {
   background-color: #1d4ed8;
 }
 

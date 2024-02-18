@@ -2,6 +2,7 @@ import { handleRegistration } from "../../../helpers/validateRegistration";
 import { Modal } from "antd";
 import { useAuth } from "../../../helpers/hooks/authSelector";
 import { RegistrationFormButton } from "./RegistrationFormButton";
+import { registrationSubmitBtnStyles } from "./Registration.styles";
 import { useEffect, useState } from "react";
 import { Policy } from "./Policy";
 import { resentEmailVerify } from "../../../redux/auth/operations-auth";
@@ -11,7 +12,11 @@ import { Formik, Form } from "formik";
 import { registrationSchema } from "../../../helpers/schema";
 import { registrationFormStyles } from "./Registration.styles";
 import { initialValuesTypes } from "./Registration.types";
-import { setIsVerifyModalOpen } from "../../../redux/auth/slice-auth";
+import {
+  setIsVerifyModalOpen,
+  changeUserEmail,
+  setResended,
+} from "../../../redux/auth/slice-auth";
 
 //Formik state
 const initialValues: initialValuesTypes = {
@@ -31,8 +36,7 @@ const Registration: React.FC = () => {
     height: window.innerHeight,
   });
   const dispatch = useDispatch();
-  const { isRefreshing, isVerifyModalOpen, user } = useAuth();
-  const [resended, setResended] = useState<boolean>(false);
+  const { isRefreshing, isVerifyModalOpen, user, resended } = useAuth();
   const [timeRemaining, setTimeRemaining] = useState(30);
 
   const handleResize = () => {
@@ -43,14 +47,15 @@ const Registration: React.FC = () => {
   };
 
   const handleResentEmail = () => {
-    setResended(true);
+    if (!user.email) return;
+    dispatch(setResended(true));
     dispatch(resentEmailVerify({ email: user.email }) as any);
 
     const intervalId = setInterval(() => {
       setTimeRemaining((prevTime) => {
         if (prevTime === 0) {
           clearInterval(intervalId);
-          setResended(false);
+          dispatch(setResended(false));
           return 30;
         } else {
           return prevTime - 1;
@@ -59,8 +64,13 @@ const Registration: React.FC = () => {
     }, 1000);
   };
 
+  if (timeRemaining < 30) {
+    if (isRefreshing) dispatch(setResended(false));
+  }
+
   const closeVerifyModal = () => {
     dispatch(setIsVerifyModalOpen(false));
+    dispatch(setResended(false));
   };
 
   //resize listener
@@ -77,6 +87,8 @@ const Registration: React.FC = () => {
     { resetForm }: { resetForm: () => void }
   ) => {
     const { name, email, password } = values;
+    dispatch(changeUserEmail(email));
+    console.log(user.email);
     const userData = {
       name: name.trim(),
       email: email.trim(),
@@ -93,26 +105,36 @@ const Registration: React.FC = () => {
   const formStyles: string = ` 
      shadow-shadowBoxDark from-smallWraperGradient1Dark
      to-smallWraperGradient2Dark  ${registrationFormStyles} `;
+  const btnStyles: string = `shadow-none hover:bg-buttonHoverColorDark 
+  text-buttonTextColorDark rounded-md  font-montserrat font-semibold
+  bg-buttonColorDark  disabled:opacity-50  ${registrationSubmitBtnStyles}`;
 
   return (
     <>
       <Modal open={isVerifyModalOpen} onCancel={closeVerifyModal} footer={null}>
-        <h1 className=" text-3xl text-center mb-8">Registration is succes</h1>
-        <p className="text-lg text-center">Before start you should verify email</p>
-        <p className="mt-3 text-lg text-center">{user.email}</p>
-        <div className="flex mt-12">
+        <h1 className=" text-3xl text-center font-montserrat mb-8">
+          Registration is succes
+        </h1>
+        <p className="text-lg text-center font-montserrat ">
+          Before start you should verify email
+        </p>
+        <p className="mt-3 text-lg text-center font-montserrat ">{user.email}</p>
+        <div className="flex mt-8 mb-4 items-center justify-center gap-2">
           <RegistrationFormButton
             isLoading={isRefreshing}
             onClick={closeVerifyModal}
             text="Accept"
-          />
-          <RegistrationFormButton
-            text="Resent Email"
-            isLoading={isRefreshing}
-            onClick={handleResentEmail}
-            resended={resended}
             timeRemaining={timeRemaining}
           />
+          <button
+            id="reg-btn-resend"
+            type="button"
+            onClick={handleResentEmail}
+            disabled={resended || timeRemaining < 30 ? true : false}
+            className={btnStyles}
+          >
+            {timeRemaining < 30 ? `${timeRemaining} sec` : "Resend"}
+          </button>
         </div>
       </Modal>
       <Formik
@@ -131,7 +153,11 @@ const Registration: React.FC = () => {
           </h1>
           <RegLogInputs windowSize={windowSize} />
           <Policy windowSize={windowSize} />
-          <RegistrationFormButton isLoading={isRefreshing} text="Registration" />
+          <RegistrationFormButton
+            isLoading={isRefreshing}
+            text="Registration"
+            timeRemaining={timeRemaining}
+          />
         </Form>
       </Formik>
     </>

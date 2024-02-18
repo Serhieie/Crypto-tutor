@@ -8,6 +8,8 @@ export const initialStateAuth: AuthState = {
   avatar: "",
   error: false,
   isVerifyModalOpen: false,
+  isChangePasswordModalOpen: false,
+  timeRemaining: 30,
   changingPass: false,
   resended: false,
 };

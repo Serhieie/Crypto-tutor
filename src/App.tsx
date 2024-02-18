@@ -17,14 +17,14 @@ export const Crypto = lazy(() => import("./components/AppLayout/MainContent"));
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
-  const { isRefreshing } = useAuth();
+  const { isRefreshing, isChangePasswordModalOpen, isVerifyModalOpen } = useAuth();
   //fetch current user
   useEffect(() => {
     //how to type it correctly??
     dispatch(fetchCurrentUser() as any);
   }, [dispatch]);
 
-  return isRefreshing ? (
+  return isRefreshing && !isChangePasswordModalOpen && !isVerifyModalOpen ? (
     <SuspenseLoader />
   ) : (
     <Routes>

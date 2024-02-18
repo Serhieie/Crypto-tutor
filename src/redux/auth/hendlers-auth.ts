@@ -23,6 +23,7 @@ const handleRegisterFulfilled = (
       token: action.payload.token,
       isLoadingUser: false,
       isLoggedIn: false,
+      isVerifyModalOpen: true,
     };
   }
   return state;
@@ -42,6 +43,7 @@ const handleRegisterRejected = (
     token: null,
     isLoggedIn: false,
     error: true,
+    isVerifyModalOpen: false,
   };
 };
 

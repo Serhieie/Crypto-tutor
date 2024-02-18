@@ -56,6 +56,12 @@ const authSlice = createSlice({
     setResended(state: AuthState, action: PayloadAction<boolean>) {
       state.resended = action.payload;
     },
+    setIsChangePasswordModalOpen(state: AuthState, action: PayloadAction<boolean>) {
+      state.isChangePasswordModalOpen = action.payload;
+    },
+    setTimeRemaining(state: AuthState, action: PayloadAction<number>) {
+      state.timeRemaining = action.payload;
+    },
   },
   extraReducers(builder) {
     builder
@@ -108,6 +114,8 @@ export const {
   changeUserAvatar,
   changeIsLoadingToken,
   setIsVerifyModalOpen,
+  setIsChangePasswordModalOpen,
   setChangingPass,
   setResended,
+  setTimeRemaining,
 } = authSlice.actions;

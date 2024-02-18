@@ -11,7 +11,7 @@ export const RegistrationFormButton: React.FC<RegistrationFormButtonProps> = ({
 }) => {
   const btnStyles: string = `shadow-none hover:bg-buttonHoverColorDark 
   text-buttonTextColorDark rounded-md 
-  bg-buttonColorDark  ${registrationSubmitBtnStyles}`;
+  bg-buttonColorDark  font-semibold ${registrationSubmitBtnStyles}`;
 
   return (
     <button
