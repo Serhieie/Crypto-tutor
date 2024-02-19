@@ -2,7 +2,7 @@
   "name": "crypto",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://serhieie.github.io/crypto-helper/",
+  "homepage": "/crypto-helper/",
   "type": "module",
   "scripts": {
     "dev": "vite",
