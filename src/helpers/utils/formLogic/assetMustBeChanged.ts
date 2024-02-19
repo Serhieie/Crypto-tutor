@@ -10,6 +10,7 @@ export const isAssetMustBeChanged = (
   existingAssetIndex: number
 ) => {
   const updatedAssets: CommonAsset[] = stateAssets ? [...stateAssets] : [];
+
   if (
     issAssetInStateIfLogic(updatedAssets, existingAssetIndex, newAsset, coin) &&
     coin?.price
