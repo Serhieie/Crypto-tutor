@@ -13,7 +13,7 @@ if (rootElement) {
     <React.StrictMode>
       <Provider store={store}>
         <BrowserRouter
-          basename={process.env.NODE_ENV === "production" ? "/Crypto-tutor/" : "/"}
+          basename={process.env.NODE_ENV === "production" ? "/crypto-helper/" : "/"}
         >
           <PersistGate loading={null} persistor={persistor}>
             <App />
