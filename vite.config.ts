@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   server: { watch: { usePolling: true } },
   plugins: [react()],
-  base: "/сrypto-helper",
+  base: process.env.NODE_ENV === "production" ? "/crypto-helper/" : "/",
   build: {
     outDir: "dist",
     assetsDir: ".",

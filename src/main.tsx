@@ -12,7 +12,9 @@ if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
       <Provider store={store}>
-        <BrowserRouter basename="/crypto-helper/">
+        <BrowserRouter
+          basename={process.env.NODE_ENV === "production" ? "/crypto-helper/" : "/"}
+        >
           <PersistGate loading={null} persistor={persistor}>
             <App />
           </PersistGate>
